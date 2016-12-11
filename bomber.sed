@@ -1,3 +1,6 @@
+# Originally developed by Andrey Bova
+# 10/12/2016
+
 /^\[cmd/ {
     h
     b end
@@ -30,6 +33,7 @@ x
 :print_flashback
     s/\[cmd_.*\]\n//
     w .field_temp
+    #bomb's blinking
     /first_bomb_timer_1\+\]/ {
         /first_bomb_timer_1\{,10\}\]/ {
             /first_bomb_timer_\(11\)\+\]/ s/@/./
@@ -41,6 +45,7 @@ x
             /first_bomb_timer_\(111111\)\+\]/ s/@/./
         }
     }
+    #planting player's blinking
     /first_planting/ { 
         /first_bomb_timer_\(111\)\+\]/ {
             s/1/@/
