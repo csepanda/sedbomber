@@ -2,37 +2,26 @@
 # 10/12/2016
 
 /^\[cmd/ {
-    h
-    b end
+    /\[cmd_1_up\]/    { g; b first_up;        }
+    /\[cmd_1_down\]/  { g; b first_down;      }
+    /\[cmd_1_left\]/  { g; b first_left;      }
+    /\[cmd_1_right\]/ { g; b first_right;     }
+    /\[cmd_1_plant\]/ { g; b first_terrorist; }
+    /\[cmd_nothing\]/ { g; b print;           }
+    b end;
 }
 
-$ {
-    H;
-    b controll_handle
-
-}
-
-#concatenation of previous and current lines to the pattern buffer
-s/\[status_message_immediately_.*\]//g
-H; b end
+H; b end;
 
 #first player controll
-:controll_handle
 x
-/^\[cmd_1_up\]/    { b first_up;        }
-/^\[cmd_1_down\]/  { b first_down;      }
-/^\[cmd_1_left\]/  { b first_left;      }
-/^\[cmd_1_right\]/ { b first_right;     }
-/^\[cmd_1_plant\]/ { b first_terrorist; }
-/^\[cmd_nothing\]/ { b print;           }
-#nothing
-#g; p; b end
 
 :print
     /bomb/b terrorism_handler
 :print_flashback
-    s/\[cmd_.*\]\n//
-    w .field_temp
+    #remove last command and save current game state to hold buffer
+    s/\[cmd_.*\]\n//; h
+
     #bomb's blinking
     /first_bomb_timer_1\+\]/ {
         /first_bomb_timer_1\{,10\}\]/ {
@@ -58,6 +47,7 @@ x
     s/\./ /g
     #s/\#/\[48;5;231m \[0m/g
     s/\[status_.*//g
+    s/^/[2J/
     p; b end
 
 :first_left

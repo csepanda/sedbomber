@@ -4,8 +4,14 @@
 
 tick=0.1
 
-cp field .field_temp
 clear
+
+rm -f .game_tube
+mkfifo .game_tube
+
+exec 5<>.game_tube
+sed -nf bomber.sed .game_tube &
+cat field >&5
 
 while :; do
     read -s -n 1 -t $tick key
@@ -18,9 +24,6 @@ while :; do
         e) key='[cmd_1_plant]' ;;
         *) key='[cmd_nothing]' ;;
     esac
-    echo $key > .game_cycle
-    cat .field_temp >> .game_cycle
-    clear
-    sed -nf bomber.sed .game_cycle | stdbuf -iK -oK cat
+    echo $key>&5
     sleep 0.04
 done
