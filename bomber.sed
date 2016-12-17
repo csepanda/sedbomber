@@ -26,28 +26,27 @@
     b end;
 }
 
-$ s/$/\n\n\n\n/
-H; b end;
-
-#first player controll
-x
+#$ s/$/\n\n\n\n/
+H; b end
 
 :print
     /bomb/b terrorism_handler
 :print_flashback
+    b ai_handler
+:print_after_ai
     #remove last command and save current game state to hold buffer
     s/\[cmd_.*\]\n//; h
 
     #bomb's blinking
     /first_bomb_timer_1+\]/ {
         /first_bomb_timer_1{,10}\]/ {
-            /first_bomb_timer_(11)+\]/      s/@/./
+            /first_bomb_timer_(11)+\]/     s/([1-4.=#])@/\1./
         }
         /first_bomb_timer_1{10,20}\]/ {
-            /first_bomb_timer_(111)+\]/     s/@/./
+            /first_bomb_timer_(111)+\]/     s/([1-4.=#])@/\1./
         }
         /first_bomb_timer_1{20}\]/ {
-            /first_bomb_timer_(111111)+\]/  s/@/./
+            /first_bomb_timer_(1111111)+\]/ s/([1-4.=#])@/\1./
         }
     }
 
@@ -106,9 +105,14 @@ x
                           /fourth_planting/ s/([1-4.=#])4/\1*/ }
 
     s/\./ /g
-    s/\[status_.*//g
-    #s/^/[2J/
-    s/^/[H/
+    /\[DEBUG_MODE\]/ {
+        s/\]/\]\n/g
+        s/^/[2J/
+    }
+    /\[DEBUG_MODE\]/! { 
+        s/\[.*\]//g
+        s/^/[H/
+    }
     p; b end
 
 :1_left
@@ -318,8 +322,10 @@ x
     b check_next_isis_1
 
 :first_bomb_tsss_boom
-    s/first_bomb_timer_/first_bomb_blast_11/
-    t check_next_isis_1
+    /first_bomb_timer_/ { 
+        s/first_bomb_timer_/first_bomb_blast_11/ 
+        b check_next_isis_1 
+    }
     /first_planting/b first_commit_suicide
 
     /first_bomb_blast_11/ {
@@ -394,13 +400,14 @@ x
     b check_next_isis_2
 
 :second_bomb_tsss_boom
-    s/second_bomb_timer_/second_bomb_blast_11/
-    t check_next_isis_2
+    /second_bomb_timer_/ {
+        s/second_bomb_timer_/second_bomb_blast_11/
+        b check_next_isis_2
+    }
     /second_planting/b second_commit_suicide
 
     /second_bomb_blast_11/ {
         s/second_bomb_blast_11/second_bomb_blast_1/
-        s/[1-4=.]a/*a/
         s/a[1-4=.]/a*/
         s/[1-4=.](.{79})a/*\1a/
         s/a(.{79})[1-4=.]/a\1*/
@@ -470,8 +477,10 @@ x
     b check_next_isis_3
 
 :third_bomb_tsss_boom
-    s/third_bomb_timer_/third_bomb_blast_11/
-    t check_next_isis_3
+    /third_bomb_timer_/ { 
+        s/third_bomb_timer_/third_bomb_blast_11/
+        b check_next_isis_3
+    }
     /third_planting/b third_commit_suicide
 
     /third_bomb_blast_11/ {
@@ -546,8 +555,10 @@ x
     b print_flashback
 
 :fourth_bomb_tsss_boom
-    s/fourth_bomb_timer_/fourth_bomb_blast_11/
-    t print_flashback
+    /fourth_bomb_timer_/ {
+        s/fourth_bomb_timer_/fourth_bomb_blast_11/
+        b print_flashback
+    }
     /fourth_planting/b fourth_commit_suicide
 
     /fourth_bomb_blast_11/ {
@@ -613,5 +624,255 @@ x
     }
     b print_flashback
 
+
+# TO AI&BACK
+# AI SCHEME:
+#   perform command from query if has_cmd_query
+#   else:
+#   1) set goal
+#   2) handle goal and set cmd_query
+# GOALS:
+#   AI_SECOND_SEEK_FIRST
+#       AI_SECOND_LINE_DOWN
+#
+#
+#
+#
+#
+#
+:ai_handler
+:second_terrorist_ai
+
+#set goals for AI_FSM
+  #first at all prevent duplicate goals by checking already containg goal
+  /\[ai_2_cmd_query/! {
+    #taking cover
+    /\[ai_2_goal_line_down\]/! {
+        /[@a0o*](.{79}(\..{79}(\..{79})?)?)2.*\[FIELD_END\]/ { 
+            s/\[ai_2_goal_line_up\]//
+            s/\[ai_2_goal_shift_(left|right)\]//
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/$/\[ai_2_goal_line_down\]/
+            /\[ai_2_taking_cover/! {
+        s/(([@a0o])(.{79}(\..{79}(\..{79})?)?)2.*)$/\1\[ai_2_taking_cover_\2\]/
+            }
+            b ai_2_goal_handler
+        }
+    }
+    /\[ai_2_goal_line_up\]/! {
+        /2(.{79}(\..{79}(\..{79})?)?)[@a0o*].*\[FIELD_END\]/ {
+            s/\[ai_2_goal_line_down\]//
+            s/\[ai_2_goal_shift_(left|right)\]//
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/$/\[ai_2_goal_line_up\]/
+            /\[ai_2_taking_cover/! {
+        s/(2(.{79}(\..{79}(\..{79})?)?)([@a0o]).*)$/\1\[ai_2_taking_cover_\5\]/
+            }
+            b ai_2_goal_handler
+        }
+    }
+    
+    /\[ai_2_goal_shift_right\]/! {
+        /[@a0o*]\.?\.?\.?2.*\[FIELD_END\]/ {
+            s/\[ai_2_goal_shift_left\]//
+            s/\[ai_2_goal_line_(up|down)\]//
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/$/\[ai_2_goal_shift_right\]/
+            /\[ai_2_taking_cover/! { 
+                s/(([@a0o])\.?\.?\.?2.*)$/\1\[ai_2_taking_cover_\2\]/
+            }
+            b ai_2_goal_handler
+        }
+    }
+
+    /\[ai_2_goal_shift_left\]/! {
+        /2\.?\.?\.?[@a0o*].*\[FIELD_END\]/ {
+            s/\[ai_2_goal_shift_right\]//
+            s/\[ai_2_goal_line_(up|down)\]//
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/$/[ai_2_goal_shift_left]/
+            /\[ai_2_taking_cover/! {
+                s/(2\.?\.?\.?([@a0o]).*)$/\1[ai_2_taking_cover_\2]/
+            }
+            b ai_2_goal_handler
+        }
+    }
+    #choose target
+    
+    
+    #seeking target
+    /\[ai_2_goal_line_up\]/! {
+        /1([^\n]+\n[^\n]+)+2.*\[FIELD_END\]/ {
+            s/\[ai_2_goal_line_(down|up)\]//
+            s/\[ai_2_goal_shift_(left|right)\]//
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/\[ai_2_goal_plant_bomb\]//
+            #target is more than one line upward from second bomber
+            /1(.*\n){3,}[^\n]*2.*\[FIELD_END\]/ {
+                s/$/[ai_2_goal_line_up]/
+                b ai_2_goal_handler
+            }
+            #prevent cycling
+            /#.{78}#2/ {                
+                s/$/[ai_2_goal_line_up]/;
+                b ai_2_goal_handler;
+            }
+            #place target's "shadow" in one row with second bomber
+            s/1(.{79})(.)(.*\[FIELD_END\])/\2\11\3/ 
+            #is target's "shadow" to the left or to the right from second bomber
+            /1[^\n]*#2#/ { s/$/[ai_2_goal_slide_up_left]/; b 2_goal_up_fin; }
+            /#2#[^\n]*1/ { s/$/[ai_2_goal_slide_up_right]/;b 2_goal_up_fin; }
+            /1[^\n]*2.*\[FIELD_END\]/ { s/$/[ai_2_goal_shift_left]/  }
+            /2[^\n]*1.*\[FIELD_END\]/ { s/$/[ai_2_goal_shift_right]/ }
+            :2_goal_up_fin
+            s/(.)(.{79})1(.*\[FIELD_END\])/1\2\1\3/
+            /1(.*\n){2}[^\n]*2.*\[FIELD_END\]/ {
+              s/1(.{159})(.)(.*\[FIELD_END\])/\2\11\3/ 
+              /1[^\n]*2.*\[FIELD_END\]/ { s/$/[ai_2_goal_shift_left]/  }
+              /2[^\n]*1.*\[FIELD_END\]/ { s/$/[ai_2_goal_shift_right]/ }
+              s/(.)(.{159})1(.*\[FIELD_END\])/1\2\1\3/
+            }
+        }
+    }
+    /\[ai_2_goal_line_down\]/! {
+        /2([^\n]+\n[^[\n]+)+1.*\[FIELD_END\]/ {
+            s/\[ai_2_goal_line_(down|up)\]//
+            s/\[ai_2_goal_shift_(left|right)\]//
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/\[ai_2_goal_plant_bomb\]//
+            #target is more than one line downward from second bomber
+            /2(.*\n){3,}[^\n]*1.*\[FIELD_END\]/ {
+                s/$/[ai_2_goal_line_down\]/
+                b ai_2_goal_handler
+            }
+            #prevent cycling
+            /#2.{78}#/ {
+                s/$/[ai_2_goal_line_down]/;
+                b ai_2_goal_handler;
+            }
+            #place target's "shadow" in one row with second bomber
+            s/(.)(.{79})1(.*\[FIELD_END\])/1\2\1\3/
+            #is target's "shadow" to the left or to the right from second bomber
+            
+            /1[^\n]*#2#/ {s/$/[ai_2_goal_slide_down_left]/; b 2_goal_down_fin;}
+            /#2#[^\n]*1/ {s/$/[ai_2_goal_slide_down_right]/;b 2_goal_down_fin;}
+            /1[^\n]*2.*\[FIELD_END\]/ { s/$/[ai_2_goal_shift_left]/  }
+            /2[^\n]*1.*\[FIELD_END\]/ { s/$/[ai_2_goal_shift_right]/ }
+            :2_goal_down_fin
+            s/1(.{79})(.)(.*\[FIELD_END\])/\2\11\3/ 
+            /2(.*\n){2}[^\n]*1.*\[FIELD_END\]/ {
+              s/(.)(.{159})1(.*\[FIELD_END\])/1\2\1\3/
+              /1[^\n]*2.*\[FIELD_END\]/ { s/$/[ai_2_goal_shift_left]/  }
+              /2[^\n]*1.*\[FIELD_END\]/ { s/$/[ai_2_goal_shift_right]/ }
+              s/1(.{159})(.)(.*\[FIELD_END\])/\2\11\3/ 
+            }
+        }
+    }
+    
+    /\[ai_2_goal_shift_left\]/! {
+        /1[^\n#]+2/ {
+            s/\[ai_2_goal_shift_right\]//
+            s/\[ai_2_goal_line_(up|down)\]//
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/\[ai_2_goal_plant_bomb\]//
+            s/$/[ai_2_goal_shift_left]/
+        }
+    }
+
+    /\[ai_2_goal_shift_rigth\]/! {
+        /2[^\n#]+1/ {
+            s/\[ai_2_goal_shift_left\]//
+            s/\[ai_2_goal_line_(up|down)\]//
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/\[ai_2_goal_plant_bomb\]//
+            s/$/[ai_2_goal_shift_right]/
+        }
+    }
+#SEEK_GOAL_COMPLETE; Time to blow it
+    /\[ai_2_goal_plant_bomb\]/! {
+      /[12](\.?|.{79}|.{79}\..{79})[21].*\[FIELD_END\]/ {
+          s/\[ai_2_goal_(line|shift)_(up|down|right|left)\]//g
+          s/$/[ai_2_goal_plant_bomb]/
+      }
+    }
+  }
+:ai_2_goal_handler
+#GOAL_HANDLER    
+    /\[ai_2_cmd_query/! {
+        /\[ai_2_goal_plant_bomb\]/ {
+            s/\[ai_2_goal_plant_bomb\]//
+            s/$/\[ai_2_cmd_query_!plant\]/
+            #go_away_way
+            /1\.?2/                  s/$/[ai_2_goal_shift_right]/
+            /2\.?1/                  s/$/[ai_2_goal_shift_left]/
+            /1(.{79}|.{79}\..{79})2/ s/$/[ai_2_goal_line_down]/
+            /2(.{79}|.{79}\..{79})1/ s/$/[ai_2_goal_line_up]/
+        }
+        /\[ai_2_goal_line_up\]/ {            
+            /\.(.{79})2/  { s/$/[ai_2_cmd_query_!up]/;            b asd; }
+            /#\.(.{78})2/ { s/$/[ai_2_cmd_query_!right_!up]/;     b asd; }
+            /\.#(.{79})2/ { s/$/[ai_2_cmd_query_!left_!up]/;       b asd; }
+        }
+        /\[ai_2_goal_line_down\]/ {
+            /2(.{79})\./  { s/$/[ai_2_cmd_query_!down]/;          b asd; }
+            /2(.{79})#\./ { s/$/[ai_2_cmd_query_!right_!down]/;   b asd; }
+            /2(.{78})\.#/ { s/$/[ai_2_cmd_query_!left_!down]/;     b asd; }
+        }
+        /\[ai_2_goal_shift_right\]/ {
+            /2\./           { s/$/[ai_2_cmd_query_!right]/;       b asd; }
+            /\.\.(.{79})2#/ { s/$/[ai_2_cmd_query_!up_!right]/;   b asd; }
+            /2#(.{79})\.\./ { s/$/[ai_2_cmd_query_!down_!right]/; b asd; }
+        }
+        /\[ai_2_goal_shift_left\]/ {
+            /\.2/           { s/$/[ai_2_cmd_query_!left]/;        b asd; }
+            /\.\.(.{79})#2/ { s/$/[ai_2_cmd_query_!up_!left]/;    b asd; }
+            /#2(.{79})\.\./ { s/$/[ai_2_cmd_query_!down_!left]/;  b asd; }
+        }
+        s/(\[ai_2_goal_slide_(up|down)_(left|right)\].*)$/\1[ai_2_cmd_query_!\2_!\3]/
+    }
+:asd
+#CMD_QUERY_HANDLER
+    /\[ai_2_cmd_query.*/ {
+        /\[ai_2_cmd_complete\]/b sad
+        s/$/\[ai_2_cmd_complete\]/
+        /\[ai_2_cmd_query_!plant\]/ {
+            s/\[ai_2_cmd_query_!plant\]//
+            b 2_terrorist
+        }
+        /\[ai_2_cmd_query_!right/ {
+          s/(ai_2_cmd_query)_!right/\1/
+          b 2_right
+        }
+        /\[ai_2_cmd_query_!left/ {
+          s/(ai_2_cmd_query)_!left/\1/
+          b 2_left
+        }
+        /\[ai_2_cmd_query_!up/ {
+          s/(ai_2_cmd_query)_!up/\1/
+          b 2_up
+        }
+        /\[ai_2_cmd_query_!down/ {
+          s/(ai_2_cmd_query)_!down/\1/
+          b 2_down
+        }
+        s/\[ai_2_cmd_query\]//
+    }
+:sad
+
+:ai_next
+s/\[ai_(2|3|4)_cmd_complete\]//g
+s/\[ai_(2|3|4)_cmd_query\]//
+/\[ai_2_taking_cover/ {
+    s/\[ai_2_goal_(line|shift)_(up|down|left|right)\]//g
+    /([@a0o]).*\[ai_2_taking_cover_\1/b print_after_ai
+}
+s/\[ai_2_taking_cover_[@a0o]\]//g
+b print_after_ai
 :end
+
+s/\[ai_2_cmd_complete\]//g
+
+
+:abschluss
+
 

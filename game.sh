@@ -14,7 +14,9 @@ sed -nrf bomber.sed .game_tube &
 cat field >&5
 
 while :; do
-    read -s -n 1 -t $tick key
+    if read -s -n 1 -t $tick key; then
+        sleep 0.05
+    fi
     case $key in
         # First player movement : wasd
         'w') key='[cmd_1_up]'    ;;
@@ -48,4 +50,7 @@ while :; do
     esac
     echo $key>&5
     sleep 0.04
+    while read -r -t 0; do read -r -t 0.001; done
 done
+
+
