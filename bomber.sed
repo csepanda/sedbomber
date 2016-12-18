@@ -32,9 +32,12 @@ H; b end
 :print
     /bomb/b terrorism_handler
 :print_flashback
+    b distance_check_2_1
+:prerw
     b ai_handler
 :print_after_ai
     #remove last command and save current game state to hold buffer
+    s/\n{2,}//
     s/\[cmd_.*\]\n//; h
 
     #bomb's blinking
@@ -110,7 +113,7 @@ H; b end
         s/^/[2J/
     }
     /\[DEBUG_MODE\]/! { 
-        s/\[.*\]//g
+       # s/\[.*\]//g
         s/^/[H/
     }
     p; b end
@@ -642,60 +645,52 @@ H; b end
 #
 :ai_handler
 :second_terrorist_ai
-
+b print_after_ai
 #set goals for AI_FSM
-  #first at all prevent duplicate goals by checking already containg goal
   /\[ai_2_cmd_query/! {
     #taking cover
-    /\[ai_2_goal_line_down\]/! {
-        /[@a0o*](.{79}(\..{79}(\..{79})?)?)2.*\[FIELD_END\]/ { 
-            s/\[ai_2_goal_line_up\]//
-            s/\[ai_2_goal_shift_(left|right)\]//
-            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
-            s/$/\[ai_2_goal_line_down\]/
-            /\[ai_2_taking_cover/! {
+    /[@a0o*](.{79}(\..{79}(\..{79})?)?)2.*\[FIELD_END\]/ { 
+      s/\[ai_2_goal_line_up\]//g
+      s/\[ai_2_goal_shift_(left|right)\]//g
+      s/\[ai_2_goal_slide_(up|down)_(left|right)\]//g
+      s/$/\[ai_2_goal_line_down\]/
+      /\[ai_2_taking_cover/! {
         s/(([@a0o])(.{79}(\..{79}(\..{79})?)?)2.*)$/\1\[ai_2_taking_cover_\2\]/
-            }
-            b ai_2_goal_handler
-        }
-    }
-    /\[ai_2_goal_line_up\]/! {
-        /2(.{79}(\..{79}(\..{79})?)?)[@a0o*].*\[FIELD_END\]/ {
-            s/\[ai_2_goal_line_down\]//
-            s/\[ai_2_goal_shift_(left|right)\]//
-            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
-            s/$/\[ai_2_goal_line_up\]/
-            /\[ai_2_taking_cover/! {
-        s/(2(.{79}(\..{79}(\..{79})?)?)([@a0o]).*)$/\1\[ai_2_taking_cover_\5\]/
-            }
-            b ai_2_goal_handler
-        }
-    }
-    
-    /\[ai_2_goal_shift_right\]/! {
-        /[@a0o*]\.?\.?\.?2.*\[FIELD_END\]/ {
-            s/\[ai_2_goal_shift_left\]//
-            s/\[ai_2_goal_line_(up|down)\]//
-            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
-            s/$/\[ai_2_goal_shift_right\]/
-            /\[ai_2_taking_cover/! { 
-                s/(([@a0o])\.?\.?\.?2.*)$/\1\[ai_2_taking_cover_\2\]/
-            }
-            b ai_2_goal_handler
-        }
+      }
+      b ai_2_goal_handler
     }
 
-    /\[ai_2_goal_shift_left\]/! {
-        /2\.?\.?\.?[@a0o*].*\[FIELD_END\]/ {
-            s/\[ai_2_goal_shift_right\]//
-            s/\[ai_2_goal_line_(up|down)\]//
-            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
-            s/$/[ai_2_goal_shift_left]/
-            /\[ai_2_taking_cover/! {
-                s/(2\.?\.?\.?([@a0o]).*)$/\1[ai_2_taking_cover_\2]/
-            }
-            b ai_2_goal_handler
-        }
+    /2(.{79}(\..{79}(\..{79})?)?)[@a0o*].*\[FIELD_END\]/ {
+      s/\[ai_2_goal_line_down\]//g
+      s/\[ai_2_goal_shift_(left|right)\]//g
+      s/\[ai_2_goal_slide_(up|down)_(left|right)\]//g
+      s/$/\[ai_2_goal_line_up\]/
+      /\[ai_2_taking_cover/! {
+        s/(2(.{79}(\..{79}(\..{79})?)?)([@a0o]).*)$/\1\[ai_2_taking_cover_\5\]/
+      }
+      b ai_2_goal_handler
+    }
+    
+    /[@a0o*]\.?\.?\.?2.*\[FIELD_END\]/ {
+      s/\[ai_2_goal_shift_left\]//g
+      s/\[ai_2_goal_line_(up|down)\]//g
+      s/\[ai_2_goal_slide_(up|down)_(left|right)\]//g
+      s/$/\[ai_2_goal_shift_right\]/
+      /\[ai_2_taking_cover/! { 
+        s/(([@a0o])\.?\.?\.?2.*)$/\1\[ai_2_taking_cover_\2\]/
+      }
+      b ai_2_goal_handler
+    }
+
+    /2\.?\.?\.?[@a0o*].*\[FIELD_END\]/ {
+      s/\[ai_2_goal_shift_right\]//g
+      s/\[ai_2_goal_line_(up|down)\]//g
+      s/\[ai_2_goal_slide_(up|down)_(left|right)\]//g
+      s/$/[ai_2_goal_shift_left]/
+      /\[ai_2_taking_cover/! {
+        s/(2\.?\.?\.?([@a0o]).*)$/\1[ai_2_taking_cover_\2]/
+      }
+      b ai_2_goal_handler
     }
     #choose target
     
@@ -703,10 +698,10 @@ H; b end
     #seeking target
     /\[ai_2_goal_line_up\]/! {
         /1([^\n]+\n[^\n]+)+2.*\[FIELD_END\]/ {
-            s/\[ai_2_goal_line_(down|up)\]//
-            s/\[ai_2_goal_shift_(left|right)\]//
-            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
-            s/\[ai_2_goal_plant_bomb\]//
+            s/\[ai_2_goal_line_(down|up)\]//g
+            s/\[ai_2_goal_shift_(left|right)\]//g
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//g
+            s/\[ai_2_goal_plant_bomb\]//g
             #target is more than one line upward from second bomber
             /1(.*\n){3,}[^\n]*2.*\[FIELD_END\]/ {
                 s/$/[ai_2_goal_line_up]/
@@ -736,10 +731,10 @@ H; b end
     }
     /\[ai_2_goal_line_down\]/! {
         /2([^\n]+\n[^[\n]+)+1.*\[FIELD_END\]/ {
-            s/\[ai_2_goal_line_(down|up)\]//
-            s/\[ai_2_goal_shift_(left|right)\]//
-            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
-            s/\[ai_2_goal_plant_bomb\]//
+            s/\[ai_2_goal_line_(down|up)\]//g
+            s/\[ai_2_goal_shift_(left|right)\]//g
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//g
+            s/\[ai_2_goal_plant_bomb\]//g
             #target is more than one line downward from second bomber
             /2(.*\n){3,}[^\n]*1.*\[FIELD_END\]/ {
                 s/$/[ai_2_goal_line_down\]/
@@ -771,19 +766,19 @@ H; b end
     
     /\[ai_2_goal_shift_left\]/! {
         /1[^\n#]+2/ {
-            s/\[ai_2_goal_shift_right\]//
-            s/\[ai_2_goal_line_(up|down)\]//
-            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
-            s/\[ai_2_goal_plant_bomb\]//
+            s/\[ai_2_goal_shift_(right|left)\]//g
+            s/\[ai_2_goal_line_(up|down)\]//g
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//g
+            s/\[ai_2_goal_plant_bomb\]//g
             s/$/[ai_2_goal_shift_left]/
         }
     }
 
     /\[ai_2_goal_shift_rigth\]/! {
         /2[^\n#]+1/ {
-            s/\[ai_2_goal_shift_left\]//
-            s/\[ai_2_goal_line_(up|down)\]//
-            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//
+            s/\[ai_2_goal_shift_(left|right)\]//g
+            s/\[ai_2_goal_line_(up|down)\]//g
+            s/\[ai_2_goal_slide_(up|down)_(left|right)\]//g
             s/\[ai_2_goal_plant_bomb\]//
             s/$/[ai_2_goal_shift_right]/
         }
@@ -868,11 +863,198 @@ s/\[ai_(2|3|4)_cmd_query\]//
 }
 s/\[ai_2_taking_cover_[@a0o]\]//g
 b print_after_ai
-:end
 
+
+:distance_check_2_1
+  s/\[dis_sec_fir:8*:dissfi\]//
+  s/\[DTF:.*:FTD\]//
+  #check vertical distance
+  h
+  s/$/[dis_sec_fir::dissfi]/  
+  s/(#.*)(\[FIELD_END\].*)$/\1\2[DTF:\1:FTD]/
+  s/.*\[FIELD_END\]//
+  s/#[@a0o*#34=.]*([12])?[@a0o*#34=.]*([12])?[@a0o*#34=.]*#\n/\1\2\n/g
+  s/(\[dis_sec_fir:)(:dissfi\])\[DTF:.*[12](\n*)[21].*:FTD\]/\1\3\2/
+  s/^.*(\[dis_sec_fir:\n*:dissfi\]).*$/\1/  
+  y/\n/8/
+  H; x;
+  #check horizontal distance
+  h
+  #skip preparation if already on the same line
+  /[12][^\n]*[12].*\[FIELD_END\]/b distance_check_2_1_hcompare
+  #put on neighbor lines
+  /#{79}.*\n#[^\n]{,79}[12][^\n]{,79}#\n#[^\n]{,79}[12][^\n]{,79}#\n.*\[FIELD_END]/b distance_check_2_1_put_on_line
+s/#{79}.*\n(#[^\n]{,79}[12][^\n]{,79}#\n).*\n(#[^\n]{,79}[12][^\n]{,79}#\n).*\[FIELD_END]/\1\2\[FIELD_END\]/
+  :distance_check_2_1_put_on_line
+  s/^.*#{79}[^12]*\n(#[^\n]{,79}[12][^\n]{,79}#\n.*\[FIELD_END\])/\1/
+  s/(.)(.{79})([12])(.*\[FIELD_END\])/\3\2\1\4/
+  :distance_check_2_1_hcompare
+  s/[12]([^\n]*)[12].*\[FIELD_END\].*(\[dis_sec_fir:8*)(:dissfi\])/\2\1\3/
+  s/^.*(\[dis_sec_fir:.*:dissfi\]).*$/\1/  
+  y/@ao0=*#.34/8888888888/
+  s/(\[dis_sec_fir)/\1SPIKE/
+  H; x; 
+  s/\n?\[dis_sec_fir:8*:dissfi\]//
+  s/\n?(\[dis_sec_fir)SPIKE/\1/
+
+:distance_check_2_3
+  s/\[dis_sec_th:8*:dissth\]//
+  s/\[DTF:.*:FTD\]//
+  #check vertical distance
+  h
+  s/$/[dis_sec_th::dissth]/  
+  s/(#.*)(\[FIELD_END\].*)$/\1\2[DTF:\1:FTD]/
+  s/.*\[FIELD_END\]//
+  s/#[@a0o*#14=.]*([23])?[@a0o*#14=.]*([23])?[@a0o*#14=.]*#\n/\1\2\n/g
+  s/(\[dis_sec_th:)(:dissth\])\[DTF:.*[23](\n*)[23].*:FTD\]/\1\3\2/
+  s/^.*(\[dis_sec_th:\n*:dissth\]).*$/\1/  
+  y/\n/8/
+  H; x;
+  #check horizontal distance
+  h
+  #skip preparation if already on the same line
+  /[23][^\n]*[23].*\[FIELD_END\]/b distance_check_2_3_hcompare
+  #put on neighbor lines
+  /#{79}.*\n#[^\n]{,79}[23][^\n]{,79}#\n#[^\n]{,79}[23][^\n]{,79}#\n.*\[FIELD_END]/b distance_check_2_3_put_on_line
+s/#{79}.*\n(#[^\n]{,79}[23][^\n]{,79}#\n).*\n(#[^\n]{,79}[23][^\n]{,79}#\n).*\[FIELD_END]/\1\2\[FIELD_END\]/
+  :distance_check_2_3_put_on_line
+  s/^.*#{79}[^23]*\n(#[^\n]{,79}[23][^\n]{,79}#\n.*\[FIELD_END\])/\1/
+  s/(.)(.{79})([23])(.*\[FIELD_END\])/\3\2\1\4/
+  :distance_check_2_3_hcompare
+  s/[23]([^\n]*)[23].*\[FIELD_END\].*(\[dis_sec_th:8*)(:dissth\])/\2\1\3/
+  s/^.*(\[dis_sec_th:.*:dissth\]).*$/\1/  
+  y/@ao0=*#.14/8888888888/
+  s/(\[dis_sec_th)/\1SPIKE/
+  H; x; 
+  s/\n?\[dis_sec_th:8*:dissth\]//
+  s/\n?(\[dis_sec_th)SPIKE/\1/
+
+:distance_check_2_4
+  s/\[dis_sec_fu:8*:dissfu\]//
+  s/\[DTF:.*:FTD\]//
+  h
+  s/$/[dis_sec_fu::dissfu]/  
+  s/(#.*)(\[FIELD_END\].*)$/\1\2[DTF:\1:FTD]/
+  s/.*\[FIELD_END\]//
+  s/#[@a0o*#13=.]*([24])?[@a0o*#13=.]*([24])?[@a0o*#13=.]*#\n/\1\2\n/g
+  s/(\[dis_sec_fu:)(:dissfu\])\[DTF:.*[24](\n*)[24].*:FTD\]/\1\3\2/
+  s/^.*(\[dis_sec_fu:\n*:dissfu\]).*$/\1/  
+  y/\n/8/
+  H; x; 
+  #check horizontal distance
+  h
+  #skip preparation if already on the same line
+  /[24][^\n]*[24].*\[FIELD_END\]/b distance_check_2_4_hcompare
+  #put on neighbor lines
+  /#{79}.*\n#[^\n]{,79}[24][^\n]{,79}#\n#[^\n]{,79}[24][^\n]{,79}#\n.*\[FIELD_END]/b distance_check_2_4_put_on_line
+s/#{79}.*\n(#[^\n]{,79}[24][^\n]{,79}#\n).*\n(#[^\n]{,79}[24][^\n]{,79}#\n).*\[FIELD_END]/\1\2\[FIELD_END\]/
+  :distance_check_2_4_put_on_line
+  s/^.*#{79}[^24]*\n(#[^\n]{,79}[24][^\n]{,79}#\n.*\[FIELD_END\])/\1/
+  s/(.)(.{79})([24])(.*\[FIELD_END\])/\3\2\1\4/
+  :distance_check_2_4_hcompare
+  s/[24]([^\n]*)[24].*\[FIELD_END\].*(\[dis_sec_fu:8*)(:dissfu\])/\2\1\3/
+  s/^.*(\[dis_sec_fu:.*:dissfu\]).*$/\1/  
+  y/@ao0=*#.13/8888888888/
+  s/(\[dis_sec_fu)/\1SPIKE/
+  H; x; 
+  s/\n?\[dis_sec_fu:8*:dissfu\]//
+  s/\n?(\[dis_sec_fu)SPIKE/\1/
+:distance_check_3_4
+  s/\[dis_th_fu:8*:distfu\]//
+  s/\[DTF:.*:FTD\]//
+  h
+  s/$/[dis_th_fu::distfu]/  
+  s/(#.*)(\[FIELD_END\].*)$/\1\2[DTF:\1:FTD]/
+  s/.*\[FIELD_END\]//
+  s/#[@a0o*#12=.]*([34])?[@a0o*#12=.]*([34])?[@a0o*#12=.]*#\n/\1\2\n/g
+  s/(\[dis_th_fu:)(:distfu\])\[DTF:.*[34](\n*)[34].*:FTD\]/\1\3\2/
+  s/^.*(\[dis_th_fu:\n*:distfu\]).*$/\1/  
+  y/\n/8/
+  H; x; 
+  #check horizontal distance
+  h
+  #skip preparation if already on the same line
+  /[34][^\n]*[34].*\[FIELD_END\]/b distance_check_3_4_hcompare
+  #put on neighbor lines
+  /#{79}.*\n#[^\n]{,79}[34][^\n]{,79}#\n#[^\n]{,79}[34][^\n]{,79}#\n.*\[FIELD_END]/b distance_check_3_4_put_on_line
+s/#{79}.*\n(#[^\n]{,79}[34][^\n]{,79}#\n).*\n(#[^\n]{,79}[34][^\n]{,79}#\n).*\[FIELD_END]/\1\2\[FIELD_END\]/
+  :distance_check_3_4_put_on_line
+  s/^.*#{79}[^34]*\n(#[^\n]{,79}[34][^\n]{,79}#\n.*\[FIELD_END\])/\1/
+  s/(.)(.{79})([34])(.*\[FIELD_END\])/\3\2\1\4/
+  :distance_check_3_4_hcompare
+  s/[34]([^\n]*)[34].*\[FIELD_END\].*(\[dis_th_fu:8*)(:distfu\])/\2\1\3/
+  s/^.*(\[dis_th_fu:.*:distfu\]).*$/\1/
+  y/@ao0=*#.12/8888888888/
+  s/(\[dis_th_fu)/\1SPIKE/
+  H; x; 
+  s/\n?\[dis_th_fu:8*:distfu\]//
+  s/\n?(\[dis_th_fu)SPIKE/\1/
+
+:distance_check_3_1
+  s/\[dis_th_fi:8*:distfi\]//
+  s/\[DTF:.*:FTD\]//
+  h
+  s/$/[dis_th_fi::distfi]/  
+  s/(#.*)(\[FIELD_END\].*)$/\1\2[DTF:\1:FTD]/
+  s/.*\[FIELD_END\]//
+  s/#[@a0o*#42=.]*([31])?[@a0o*#42=.]*([31])?[@a0o*#42=.]*#\n/\1\2\n/g
+  s/(\[dis_th_fi:)(:distfi\])\[DTF:.*[31](\n*)[31].*:FTD\]/\1\3\2/
+  s/^.*(\[dis_th_fi:\n*:distfi\]).*$/\1/  
+  y/\n/8/
+  H; x; 
+  #check horizontal distance
+  h
+  #skip preparation if already on the same line
+  /[31][^\n]*[31].*\[FIELD_END\]/b distance_check_3_1_hcompare
+  #put on neighbor lines
+  /#{79}.*\n#[^\n]{,79}[31][^\n]{,79}#\n#[^\n]{,79}[31][^\n]{,79}#\n.*\[FIELD_END]/b distance_check_3_1_put_on_line
+s/#{79}.*\n(#[^\n]{,79}[31][^\n]{,79}#\n).*\n(#[^\n]{,79}[31][^\n]{,79}#\n).*\[FIELD_END]/\1\2\[FIELD_END\]/
+  :distance_check_3_1_put_on_line
+  s/^.*#{79}[^31]*\n(#[^\n]{,79}[31][^\n]{,79}#\n.*\[FIELD_END\])/\1/
+  s/(.)(.{79})([31])(.*\[FIELD_END\])/\3\2\1\4/
+  :distance_check_3_1_hcompare
+  s/[31]([^\n]*)[31].*\[FIELD_END\].*(\[dis_th_fi:8*)(:distfi\])/\2\1\3/
+  s/^.*(\[dis_th_fi:.*:distfi\]).*$/\1/
+  y/@ao0=*#.42/8888888888/
+  s/(\[dis_th_fi)/\1SPIKE/
+  H; x; 
+  s/\n?\[dis_th_fi:8*:distfi\]//
+  s/\n?(\[dis_th_fi)SPIKE/\1/
+
+:distance_check_4_1
+  s/\[dis_fu_fi:8*:disffi\]//
+  s/\[DTF:.*:FTD\]//
+  h
+  s/$/[dis_fu_fi::disffi]/  
+  s/(#.*)(\[FIELD_END\].*)$/\1\2[DTF:\1:FTD]/
+  s/.*\[FIELD_END\]//
+  s/#[@a0o*#32=.]*([41])?[@a0o*#32=.]*([41])?[@a0o*#32=.]*#\n/\1\2\n/g
+  s/(\[dis_fu_fi:)(:disffi\])\[DTF:.*[41](\n*)[41].*:FTD\]/\1\3\2/
+  s/^.*(\[dis_fu_fi:\n*:disffi\]).*$/\1/  
+  y/\n/8/
+  H; x; 
+  #check horizontal distance
+  h
+  #skip preparation if already on the same line
+  /[41][^\n]*[41].*\[FIELD_END\]/b distance_check_4_1_hcompare
+  #put on neighbor lines
+  /#{79}.*\n#[^\n]{,79}[41][^\n]{,79}#\n#[^\n]{,79}[41][^\n]{,79}#\n.*\[FIELD_END]/b distance_check_4_1_put_on_line
+s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[FIELD_END]/\1\2\[FIELD_END\]/
+  :distance_check_4_1_put_on_line
+  s/^.*#{79}[^32]*\n(#[^\n]{,79}[41][^\n]{,79}#\n.*\[FIELD_END\])/\1/
+  s/(.)(.{79})([41])(.*\[FIELD_END\])/\3\2\1\4/
+  :distance_check_4_1_hcompare
+  s/[41]([^\n]*)[41].*\[FIELD_END\].*(\[dis_fu_fi:8*)(:disffi\])/\2\1\3/
+  s/^.*(\[dis_fu_fi:.*:disffi\]).*$/\1/
+  y/@ao0=*#.32/8888888888/
+  s/(\[dis_fu_fi)/\1SPIKE/
+  H; x; 
+  s/\n?\[dis_fu_fi:8*:disffi\]//
+  s/\n?(\[dis_fu_fi)SPIKE/\1/
+  b prerw
+:end
 s/\[ai_2_cmd_complete\]//g
 
 
-:abschluss
 
 
