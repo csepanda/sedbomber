@@ -23,13 +23,21 @@
     /\[cmd_4_right\]/ { g; b 4_right;     }
     /\[cmd_4_plant\]/ { g; b 4_terrorist; }
     /\[cmd_nothing\]/ { g; b print;       }
-    b end;
+    b end
 }
 
-#$ s/$/\n\n\n\n/
-H; b end
+/^\[RANDOM_NUMBER/ {
+    b bonus_generator
+}
+
+#FIELD EATING
+H; x
+s/^\n(#{79})/\1/
+x
+b end
 
 :print
+#    s/(^#{79}\n#.{32})./\1XUY/
     /bomb/b terrorism_handler
 :print_flashback
 /\[ai_[2-4]_cmd_complete\]/b print_to_ai_handler
@@ -117,6 +125,7 @@ b  ai_cmds_completed
     s/\./ /g
     /\[DEBUG_MODE\]/ {
         /\[DEBUG_MODE_NODIST\]/ s/\[dis.*:dis.{3}\]//g
+        /\[DEBUG_MODE_NOBONU\]/ s/\[BONUS.*SUNOB\]//g
         s/\]/\]\n/g
         s/^/[2J/
     }
@@ -2487,5 +2496,96 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   
   b print_to_ai_handler
 
+
+
+
+# Randomly fill destoryable walls with bonuses
+# Bonus list:
+# K -- Bombalist    -- bomb kicker
+# F -- Pyromaniac   -- extended explosions
+# B -- Miser        -- +1 bomb
+#
+# Field must be already 'eated' by sed
+# Random number in format: [RANDOM_NUMBER:$BIN$ROW$COL$TYPE[0-9]+:NR]
+:bonus_generator
+  H; x
+  /\[RANDOM_NUMBER:[0-9]+:NR\]/! {
+      #NOT A NUMBER
+      s/\n\[RANDOM_NUMBER:.*:NR\]//
+      x; b end
+  }
+
+  :restart_bonus_generator
+  # Create bonus position entry
+  #   Format: [BONUS_$BIN:$ROW,$COL,$TYP:$BIN_SUNOB]
+  #     $BIN -- bonus index number
+  #     $ROW -- bonus position: row number
+  #     $COL -- bonus position: col number
+  #     $TYP -- bonus type
+  #
+  s/(\[RANDOM_NUMBER:(..).*$)/\1\[BONUS_\2:r,c,t:\2_SUNOB\]/
+
+  # Choosing row
+  /\[RANDOM_NUMBER:..1.*1:NR\]/ {
+    /\[RANDOM_NUMBER:...[0-4]/ { s/(\[RANDOM_NUMBER:(..).*\[BONUS_\2:)r/\101/ }
+    /\[RANDOM_NUMBER:...[5-9]/ { s/(\[RANDOM_NUMBER:(..).*\[BONUS_\2:)r/\102/ }
+    b choosing_column
+  }
+  /\[RANDOM_NUMBER:..[1-4]/ {
+    /\[RANDOM_NUMBER:...[3-9]/ { 
+        s/(\[RANDOM_NUMBER:(..).(.).*\[BONUS_\2:)r/\10\3/
+    }
+    /\[RANDOM_NUMBER:...[0-2]/ {
+      s/(\[RANDOM_NUMBER:(..)10.*\[BONUS_\2:)r/\104/
+      s/(\[RANDOM_NUMBER:(..)11.*\[BONUS_\2:)r/\105/
+      s/(\[RANDOM_NUMBER:(..)12.*\[BONUS_\2:)r/\106/
+      s/(\[RANDOM_NUMBER:(..)20.*\[BONUS_\2:)r/\107/
+      s/(\[RANDOM_NUMBER:(..)21.*\[BONUS_\2:)r/\108/
+      s/(\[RANDOM_NUMBER:(..)22.*\[BONUS_\2:)r/\109/
+      s/(\[RANDOM_NUMBER:(..)30.*\[BONUS_\2:)r/\104/
+      s/(\[RANDOM_NUMBER:(..)31.*\[BONUS_\2:)r/\105/
+      s/(\[RANDOM_NUMBER:(..)32.*\[BONUS_\2:)r/\106/
+      s/(\[RANDOM_NUMBER:(..)40.*\[BONUS_\2:)r/\107/
+      s/(\[RANDOM_NUMBER:(..)41.*\[BONUS_\2:)r/\108/
+      s/(\[RANDOM_NUMBER:(..)42.*\[BONUS_\2:)r/\109/
+    }
+  }
+  /\[RANDOM_NUMBER:..[5-8]/ {
+    s/(\[RANDOM_NUMBER:(..).(.).*\[BONUS_\2:)r/\11\3/
+  }
+  /\[RANDOM_NUMBER:..9/ {
+    /\[RANDOM_NUMBER:...[0-4]/ { s/(\[RANDOM_NUMBER:(..).*\[BONUS_\2:)r/\120/ }
+    /\[RANDOM_NUMBER:...[5-9]/ { s/(\[RANDOM_NUMBER:(..).*\[BONUS_\2:)r/\121/ }
+  }
+  
+  :choosing_column
+  /\[RANDOM_NUMBER:.{4}[0-1]/ {
+    s/(\[RANDOM_NUMBER:(..)...(.).*\[BONUS_\2:..,)c/\10\3/
+  }
+  /\[RANDOM_NUMBER:.{4}[2-6]/ {
+    s/(\[RANDOM_NUMBER:(..)...(.).*\[BONUS_\2:..,)c/\11\3/
+  }
+  /\[RANDOM_NUMBER:.{4}[7-9]/ {
+    /(\[RANDOM_NUMBER:.....)[89]/ {
+      s/(\[RANDOM_NUMBER:(..)...)[89](.*)\[BONUS_\2:.*:\2_SUNOB\]/\1\3/
+      b restart_bonus_generator
+    }
+    s/(\[RANDOM_NUMBER:(..)...(.).*\[BONUS_\2:..,)c/\12\3/
+  }
+
+  # Choosing type
+  /\[RANDOM_NUMBER:.{6}[0-3]/ {
+    s/(\[RANDOM_NUMBER:(..).*\[BONUS_\2:..,..,)t/\1K/
+  }
+  /\[RANDOM_NUMBER:.{6}[0-3]/ {
+    s/(\[RANDOM_NUMBER:(..).*\[BONUS_\2:..,..,)t/\1K/
+  }
+  /\[RANDOM_NUMBER:.{6}[4-6]/ {
+    s/(\[RANDOM_NUMBER:(..).*\[BONUS_\2:..,..,)t/\1F/
+  }
+  /\[RANDOM_NUMBER:.{6}[7-9]/ {
+    s/(\[RANDOM_NUMBER:(..).*\[BONUS_\2:..,..,)t/\1B/
+  }
+
+  s/\n\[RANDOM_NUMBER:.*:NR\]//;x;b end
 :end
-s/\[ai_2_cmd_complete\]//g
