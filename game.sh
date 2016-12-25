@@ -3,18 +3,26 @@
 # 10/12/2016
 
 tick=0.1
-
+index=1
+bonus_count=32
 clear
+trap 'kill -9 -$$' 2
 
 rm -f .game_tube
 mkfifo .game_tube
-
 exec 5<>.game_tube
 sed -nrf bomber.sed .game_tube &
-cat field >&5
+cat field>&5
 
-while :; do
-    if read -s -n 1 -t $tick key; then
+while [ $index -le $bonus_count ]
+do    
+    bin=`printf '%02d' $index`
+    echo [RANDOM_NUMBER:$bin`expr $RANDOM \* 6661337`:NR]>&5    
+    index=`expr $index + 1`
+done
+while :; do    
+    if 
+        read -s -n 1 -t $tick key; then
         sleep 0.05
     fi
     case $key in
@@ -49,8 +57,5 @@ while :; do
         *) key='[cmd_nothing]' ;;
     esac
     echo $key>&5
-    sleep 0.04
     while read -r -t 0; do read -r -t 0.001; done
 done
-
-
