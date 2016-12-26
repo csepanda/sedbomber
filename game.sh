@@ -4,7 +4,7 @@
 
 tick=0.1
 index=1
-bonus_count=32
+bonus_count=64
 clear
 trap 'kill -9 -$$' 2
 
@@ -16,8 +16,7 @@ cat field>&5
 
 while [ $index -le $bonus_count ]
 do    
-    bin=`printf '%02d' $index`
-    echo [RANDOM_NUMBER:$bin`expr $RANDOM \* 6661337`:NR]>&5    
+    echo [RANDOM_NUMBER:`expr $RANDOM \* 6661337`:NR]>&5    
     index=`expr $index + 1`
 done
 while :; do    
