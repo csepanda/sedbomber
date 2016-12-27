@@ -136,6 +136,11 @@ b  ai_cmds_completed
     p; b end
 
 :1_left
+    /\[FIRST_BONUS:KICKER:BF\]/ {
+        s/\.\.([@a0o])1(.*\[FIELD_END)/\1..1\2[!KICK!]/
+        s/\.([@a0o])1(.*\[FIELD_END)/\1.1\2[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /[KFB]1.*\[FIELD_END\]/ {
         s/\[FIRST_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /K1.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:KICKER:BF]/     }
@@ -154,6 +159,11 @@ b  ai_cmds_completed
     b print
 
 :1_right
+    /\[FIRST_BONUS:KICKER:BF\]/ {
+        s/1([@a0o])\.\.(.*\[FIELD_END)/1..\1\2[!KICK!]/
+        s/1([@a0o])\.(.*\[FIELD_END)/1.\1\2[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /1[KFB].*\[FIELD_END\]/ {
         s/\[FIRST_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /1K.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:KICKER:BF]/     }
@@ -172,6 +182,11 @@ b  ai_cmds_completed
     b print
 
 :1_up
+    /\[FIRST_BONUS:KICKER:BF\]/ {
+        s/\.(.{79}\..{79})([@a0o])(.{79})1(.*\[FIELD_END)/\2\1.\31\4[!KICK!]/
+        s/\.(.{79})([@a0o])(.{79})1(.*\[FIELD_END)/\2\1.\31\4[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /[KFB].{79}1.*\[FIELD_END\]/ {
         s/\[FIRST_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /K.{79}1.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:KICKER:BF]/     }
@@ -190,6 +205,11 @@ b  ai_cmds_completed
     b print
 
 :1_down
+    /\[FIRST_BONUS:KICKER:BF\]/ {
+        s/1(.{79})([@a0o])(.{79}\..{79})\.(.*\[FIELD_END)/1\1.\3\2\4[!KICK!]/
+        s/1(.{79})([@a0o])(.{79})\.(.*\[FIELD_END)/1\1.\3\2\4[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /1.{79}[KFB].*\[FIELD_END\]/ {
         s/\[FIRST_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /1.{79}K.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:KICKER:BF]/     }
@@ -217,6 +237,11 @@ b  ai_cmds_completed
 
 #SECOND PLAYER
 :2_left
+    /\[SECOND_BONUS:KICKER:BF\]/ {
+        s/\.\.([@a0o])2(.*\[FIELD_END)/\1..2\2[!KICK!]/
+        s/\.([@a0o])2(.*\[FIELD_END)/\1.2\2[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /[KFB]2.*\[FIELD_END\]/ {
         s/\[SECOND_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /K2.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:KICKER:BF]/     }
@@ -235,6 +260,11 @@ b  ai_cmds_completed
     b print
 
 :2_right
+    /\[SECOND_BONUS:KICKER:BF\]/ {
+        s/2([@a0o])\.\.(.*\[FIELD_END)/2..\1\2[!KICK!]/
+        s/2([@a0o])\.(.*\[FIELD_END)/2.\1\2[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /2[KFB].*\[FIELD_END\]/ {
         s/\[SECOND_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /2K.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:KICKER:BF]/     }
@@ -253,6 +283,11 @@ b  ai_cmds_completed
     b print
 
 :2_up
+    /\[SECOND_BONUS:KICKER:BF\]/ {
+        s/\.(.{79}\..{79})([@a0o])(.{79})2(.*\[FIELD_END)/\2\1.\32\4[!KICK!]/
+        s/\.(.{79})([@a0o])(.{79})2(.*\[FIELD_END)/\2\1.\32\4[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /[KFB].{79}2.*\[FIELD_END\]/ {
         s/\[SECOND_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /K.{79}2.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:KICKER:BF]/     }
@@ -271,6 +306,11 @@ b  ai_cmds_completed
     b print
 
 :2_down
+    /\[SECOND_BONUS:KICKER:BF\]/ {
+        s/2(.{79})([@a0o])(.{79}\..{79})\.(.*\[FIELD_END)/2\1.\3\2\4[!KICK!]/
+        s/2(.{79})([@a0o])(.{79})\.(.*\[FIELD_END)/2\1.\3\2\4[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /2.{79}[KFB].*\[FIELD_END\]/ {
         s/\[SECOND_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /2.{79}K.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:KICKER:BF]/     }
@@ -298,6 +338,11 @@ b  ai_cmds_completed
 
 #THIRD PLAYER
 :3_left
+    /\[THIRD_BONUS:KICKER:BF\]/ {
+        s/\.\.([@a0o])3(.*\[FIELD_END)/\1..3\2[!KICK!]/
+        s/\.([@a0o])3(.*\[FIELD_END)/\1.3\2[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /[KFB]3.*\[FIELD_END\]/ {
         s/\[THIRD_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /K3.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:KICKER:BF]/     }
@@ -316,6 +361,11 @@ b  ai_cmds_completed
     b print
 
 :3_right
+    /\[THIRD_BONUS:KICKER:BF\]/ {
+        s/3([@a0o])\.\.(.*\[FIELD_END)/3..\1\2[!KICK!]/
+        s/3([@a0o])\.(.*\[FIELD_END)/3.\1\2[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /3[KFB].*\[FIELD_END\]/ {
         s/\[THIRD_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /3K.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:KICKER:BF]/     }
@@ -334,6 +384,11 @@ b  ai_cmds_completed
     b print
 
 :3_up
+    /\[THIRD_BONUS:KICKER:BF\]/ {
+        s/\.(.{79}\..{79})([@a0o])(.{79})3(.*\[FIELD_END)/\2\1.\33\4[!KICK!]/
+        s/\.(.{79})([@a0o])(.{79})3(.*\[FIELD_END)/\2\1.\33\4[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /[KFB].{79}3.*\[FIELD_END\]/ {
         s/\[THIRD_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /K.{79}3.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:KICKER:BF]/     }
@@ -352,6 +407,11 @@ b  ai_cmds_completed
     b print
 
 :3_down
+    /\[THIRD_BONUS:KICKER:BF\]/ {
+        s/3(.{79})([@a0o])(.{79}\..{79})\.(.*\[FIELD_END)/3\1.\3\2\4[!KICK!]/
+        s/3(.{79})([@a0o])(.{79})\.(.*\[FIELD_END)/3\1.\3\2\4[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /3.{79}[KFB].*\[FIELD_END\]/ {
         s/\[THIRD_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /3.{79}K.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:KICKER:BF]/     }
@@ -379,6 +439,11 @@ b  ai_cmds_completed
 
 #FOURTH PLAYER
 :4_left
+    /\[FOURTH_BONUS:KICKER:BF\]/ {
+        s/\.\.([@a0o])4(.*\[FIELD_END)/\1..4\2[!KICK!]/
+        s/\.([@a0o])4(.*\[FIELD_END)/\1.4\2[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /[KFB]4.*\[FIELD_END\]/ {
         s/\[FOURTH_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /K4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:KICKER:BF]/     }
@@ -397,6 +462,11 @@ b  ai_cmds_completed
     b print
 
 :4_right
+    /\[FOURTH_BONUS:KICKER:BF\]/ {
+        s/4([@a0o])\.\.(.*\[FIELD_END)/4..\1\2[!KICK!]/
+        s/4([@a0o])\.(.*\[FIELD_END)/4.\1\2[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /4[KFB].*\[FIELD_END\]/ {
         s/\[FOURTH_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /4K.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:KICKER:BF]/     }
@@ -415,6 +485,11 @@ b  ai_cmds_completed
     b print
 
 :4_up
+    /\[FOURTH_BONUS:KICKER:BF\]/ {
+        s/\.(.{79}\..{79})([@a0o])(.{79})4(.*\[FIELD_END)/\2\1.\34\4[!KICK!]/
+        s/\.(.{79})([@a0o])(.{79})4(.*\[FIELD_END)/\2\1.\34\4[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /[KFB].{79}4.*\[FIELD_END\]/ {
         s/\[FOURTH_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /K.{79}4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:KICKER:BF]/     }
@@ -433,6 +508,11 @@ b  ai_cmds_completed
     b print
 
 :4_down
+    /\[FOURTH_BONUS:KICKER:BF\]/ {
+        s/4(.{79})([@a0o])(.{79}\..{79})\.(.*\[FIELD_END)/4\1.\3\2\4[!KICK!]/
+        s/4(.{79})([@a0o])(.{79})\.(.*\[FIELD_END)/4\1.\3\2\4[!KICK!]/
+        /\[!KICK!\]/ { s/\[!KICK!\]//; b print; }
+    }
     /4.{79}[KFB].*\[FIELD_END\]/ {
         s/\[FOURTH_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
         /4.{79}K.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:KICKER:BF]/     }
