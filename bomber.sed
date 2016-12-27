@@ -28,7 +28,6 @@
 
 /^\[RANDOM_NUMBER/ {
     b bonus_generator
-    p
 }
 
 #FIELD EATING
@@ -422,7 +421,7 @@ b  ai_cmds_completed
         /F.{79}4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:PYROMANIAC:BF]/ }
         /B.{79}4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:BKEEPER:BF]/    }
         s/[KFB](.{79})4(.*\[FIELD_END\])/4MOVED\1.\2/
-        b 3_up_skip
+        b 4_up_skip
     }
     s/\.(.{79})4/4MOVED\1./
     :4_up_skip
@@ -440,7 +439,7 @@ b  ai_cmds_completed
         /4.{79}F.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:PYROMANIAC:BF]/ }
         /4.{79}B.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:BKEEPER:BF]/    }
         s/4(.{79})[KFB](.*\[FIELD_END\])/.\14MOVED\2/
-        b 3_down_skip
+        b 4_down_skip
     }
     s/4(.{79})\./.\14MOVED/ 
     :4_down_skip
@@ -500,18 +499,18 @@ b  ai_cmds_completed
 
     /first_bomb_blast_111/ {
         s/first_bomb_blast_111/first_bomb_blast_11/
-        s/[1-4=.]@(.*\[FIELD_END\])/*@\1/
-        s/@[1-4=.](.*\[FIELD_END\])/@*\1/
-        s/[1-4=.](.{79})@(.*\[FIELD_END\])/*\1@\2/
-        s/@(.{79})[1-4=.](.*\[FIELD_END\])/@\1*\2/
+        s/[1-4=.KFB]@(.*\[FIELD_END\])/*@\1/
+        s/@[1-4=.KFB](.*\[FIELD_END\])/@*\1/
+        s/[1-4=.KFB](.{79})@(.*\[FIELD_END\])/*\1@\2/
+        s/@(.{79})[1-4=.KFB](.*\[FIELD_END\])/@\1*\2/
         b check_next_isis_1
     }
     /first_bomb_blast_11/ {
         s/first_bomb_blast_11/first_bomb_blast_1/
-        s/[1-4=.]\*@(.*\[FIELD_END\])/**@\1/
-        s/@\*[1-4=.](.*\[FIELD_END\])/@**\1/
-        s/[1-4=.](.{79}\*.{79})@(.*\[FIELD_END\])/*\1@\2/
-        s/@(.{79}\*.{79})[1-4=.](.*\[FIELD_END\])/@\1*\2/
+        s/[1-4=.KFB]\*@(.*\[FIELD_END\])/**@\1/
+        s/@\*[1-4=.KFB](.*\[FIELD_END\])/@**\1/
+        s/[1-4=.KFB](.{79}\*.{79})@(.*\[FIELD_END\])/*\1@\2/
+        s/@(.{79}\*.{79})[1-4=.KFB](.*\[FIELD_END\])/@\1*\2/
         b check_next_isis_1
     }
     /first_bomb_blast_1/ {
@@ -535,18 +534,18 @@ b  ai_cmds_completed
 :first_commit_suicide
     /first_bomb_blast_11/ {
         s/first_bomb_blast_11/first_bomb_blast_1/
-        s/[1-4=.]1(.*\[FIELD_END\])/*1\1/
-        s/1[1-4=.](.*\[FIELD_END\])/1*\1/
-        s/[1-4=.](.{79})1(.*\[FIELD_END\])/*\11\2/
-        s/1(.{79})[1-4=.](.*\[FIELD_END\])/1\1*\2/
+        s/[1-4=.KFB]1(.*\[FIELD_END\])/*1\1/
+        s/1[1-4=.KFB](.*\[FIELD_END\])/1*\1/
+        s/[1-4=.KFB](.{79})1(.*\[FIELD_END\])/*\11\2/
+        s/1(.{79})[1-4=.KFB](.*\[FIELD_END\])/1\1*\2/
         b check_next_isis_1
     }
     /first_bomb_blast_1/ {
         s/first_bomb_blast_1/first_bomb_blast_/
-        s/[1-4=.]\*1(.*\[FIELD_END\])/**1\1/
-        s/1\*[1-4=.](.*\[FIELD_END\])/1**\1/
-        s/[1-4=.](.{79}\*.{79})1(.*\[FIELD_END\])/*\11\2/
-        s/1(.{79}\*.{79})[1-4=.](.*\[FIELD_END\])/1\1*\2/
+        s/[1-4=.KFB]\*1(.*\[FIELD_END\])/**1\1/
+        s/1\*[1-4=.KFB](.*\[FIELD_END\])/1**\1/
+        s/[1-4=.KFB](.{79}\*.{79})1(.*\[FIELD_END\])/*\11\2/
+        s/1(.{79}\*.{79})[1-4=.KFB](.*\[FIELD_END\])/1\1*\2/
         b check_next_isis_1
     }
     /first_bomb_blast_/ {
@@ -582,18 +581,18 @@ b  ai_cmds_completed
 
     /second_bomb_blast_11/ {
         s/second_bomb_blast_11/second_bomb_blast_1/
-        s/[1-4=.]a(.*\[FIELD_END\])/*a\1/
-        s/a[1-4=.](.*\[FIELD_END\])/a*\1/
-        s/[1-4=.](.{79})a(.*\[FIELD_END\])/*\1a\2/
-        s/a(.{79})[1-4=.](.*\[FIELD_END\])/a\1*\2/
+        s/[1-4=.KFB]a(.*\[FIELD_END\])/*a\1/
+        s/a[1-4=.KFB](.*\[FIELD_END\])/a*\1/
+        s/[1-4=.KFB](.{79})a(.*\[FIELD_END\])/*\1a\2/
+        s/a(.{79})[1-4=.KFB](.*\[FIELD_END\])/a\1*\2/
         b check_next_isis_2
     }
     /second_bomb_blast_1/ {
         s/second_bomb_blast_1/second_bomb_blast_/
-        s/[1-4=.]\*a(.*\[FIELD_END\])/**a\1/
-        s/a\*[1-4=.](.*\[FIELD_END\])/a**\1/
-        s/[1-4=.](.{79}\*.{79})a(.*\[FIELD_END\])/*\1a\2/
-        s/a(.{79}\*.{79})[1-4=.](.*\[FIELD_END\])/a\1*\2/
+        s/[1-4=.KFB]\*a(.*\[FIELD_END\])/**a\1/
+        s/a\*[1-4=.KFB](.*\[FIELD_END\])/a**\1/
+        s/[1-4=.KFB](.{79}\*.{79})a(.*\[FIELD_END\])/*\1a\2/
+        s/a(.{79}\*.{79})[1-4=.KFB](.*\[FIELD_END\])/a\1*\2/
         b check_next_isis_2
     }
     /second_bomb_blast_/ {
@@ -614,18 +613,18 @@ b  ai_cmds_completed
 :second_commit_suicide
     /second_bomb_blast_11/ {
         s/second_bomb_blast_11/second_bomb_blast_1/
-        s/[1-4=.]2(.*\[FIELD_END\])/*2\1/
-        s/2[1-4=.](.*\[FIELD_END\])/2*\1/
-        s/[1-4=.](.{79})2(.*\[FIELD_END\])/*\12\2/
-        s/2(.{79})[1-4=.](.*\[FIELD_END\])/2\1*\2/
+        s/[1-4=.KFB]2(.*\[FIELD_END\])/*2\1/
+        s/2[1-4=.KFB](.*\[FIELD_END\])/2*\1/
+        s/[1-4=.KFB](.{79})2(.*\[FIELD_END\])/*\12\2/
+        s/2(.{79})[1-4=.KFB](.*\[FIELD_END\])/2\1*\2/
         b check_next_isis_2
     }
     /second_bomb_blast_1/ {
         s/second_bomb_blast_1/second_bomb_blast_/
-        s/[1-4=.]\*2(.*\[FIELD_END\])/**2\1/
-        s/2\*[1-4=.](.*\[FIELD_END\])/2**\1/
-        s/[1-4=.](.{79}\*.{79})1(.*\[FIELD_END\])/*\12\2/
-        s/2(.{79}\*.{79})[1-4=.](.*\[FIELD_END\])/2\1*\2/
+        s/[1-4=.KFB]\*2(.*\[FIELD_END\])/**2\1/
+        s/2\*[1-4=.KFB](.*\[FIELD_END\])/2**\1/
+        s/[1-4=.KFB](.{79}\*.{79})1(.*\[FIELD_END\])/*\12\2/
+        s/2(.{79}\*.{79})[1-4=.KFB](.*\[FIELD_END\])/2\1*\2/
         b check_next_isis_2
     }
     /second_bomb_blast_/ {
@@ -661,18 +660,18 @@ b  ai_cmds_completed
 
     /third_bomb_blast_11/ {
         s/third_bomb_blast_11/third_bomb_blast_1/
-        s/[1-4=.]0(.*\[FIELD_END\])/*0\1/
-        s/0[1-4=.](.*\[FIELD_END\])/0*\1/
-        s/[1-4=.](.{79})0(.*\[FIELD_END\])/*\10\2/
-        s/0(.{79})[1-4=.](.*\[FIELD_END\])/0\1*\2/
+        s/[1-4=.KFB]0(.*\[FIELD_END\])/*0\1/
+        s/0[1-4=.KFB](.*\[FIELD_END\])/0*\1/
+        s/[1-4=.KFB](.{79})0(.*\[FIELD_END\])/*\10\2/
+        s/0(.{79})[1-4=.KFB](.*\[FIELD_END\])/0\1*\2/
         b check_next_isis_3
     }
     /third_bomb_blast_1/ {
         s/third_bomb_blast_1/third_bomb_blast_/
-        s/[1-4=.]\*0(.*\[FIELD_END\])/**0\1/
-        s/0\*[1-4=.](.*\[FIELD_END\])/0**\1/
-        s/[1-4=.](.{79}\*.{79})0(.*\[FIELD_END\])/*\10\2/
-        s/0(.{79}\*.{79})[1-4=.](.*\[FIELD_END\])/0\1*\2/
+        s/[1-4=.KFB]\*0(.*\[FIELD_END\])/**0\1/
+        s/0\*[1-4=.KFB](.*\[FIELD_END\])/0**\1/
+        s/[1-4=.KFB](.{79}\*.{79})0(.*\[FIELD_END\])/*\10\2/
+        s/0(.{79}\*.{79})[1-4=.KFB](.*\[FIELD_END\])/0\1*\2/
         b check_next_isis_3
     }
     /third_bomb_blast_/ {
@@ -693,18 +692,18 @@ b  ai_cmds_completed
 :third_commit_suicide
     /third_bomb_blast_11/ {
         s/third_bomb_blast_11/third_bomb_blast_1/
-        s/[1-4=.]3(.*\[FIELD_END\])/*3\1/
-        s/3[1-4=.](.*\[FIELD_END\])/3*\1/
-        s/[1-4=.](.{79})3(.*\[FIELD_END\])/*\13\2/
-        s/3(.{79})[1-4=.](.*\[FIELD_END\])/3\1*\2/
+        s/[1-4=.KFB]3(.*\[FIELD_END\])/*3\1/
+        s/3[1-4=.KFB](.*\[FIELD_END\])/3*\1/
+        s/[1-4=.KFB](.{79})3(.*\[FIELD_END\])/*\13\2/
+        s/3(.{79})[1-4=.KFB](.*\[FIELD_END\])/3\1*\2/
         b check_next_isis_3
     }
     /third_bomb_blast_1/ {
         s/third_bomb_blast_1/third_bomb_blast_/
-        s/[1-4=.]\*3(.*\[FIELD_END\])/**3\1/
-        s/3\*[1-4=.](.*\[FIELD_END\])/3**\1/
-        s/[1-4=.](.{79}\*.{79})3(.*\[FIELD_END\])/*\13\2/
-        s/3(.{79}\*.{79})[1-4=.](.*\[FIELD_END\])/3\1*\2/
+        s/[1-4=.KFB]\*3(.*\[FIELD_END\])/**3\1/
+        s/3\*[1-4=.KFB](.*\[FIELD_END\])/3**\1/
+        s/[1-4=.KFB](.{79}\*.{79})3(.*\[FIELD_END\])/*\13\2/
+        s/3(.{79}\*.{79})[1-4=.KFB](.*\[FIELD_END\])/3\1*\2/
         b check_next_isis_3
     }
     /third_bomb_blast_/ {
@@ -740,18 +739,18 @@ b  ai_cmds_completed
 
     /fourth_bomb_blast_11/ {
         s/fourth_bomb_blast_11/fourth_bomb_blast_1/
-        s/[1-4=.]o(.*\[FIELD_END\])/*o\1/
-        s/o[1-4=.](.*\[FIELD_END\])/o*\1/
-        s/[1-4=.](.{79})o(.*\[FIELD_END\])/*\1o\2/
-        s/o(.{79})[1-4=.](.*\[FIELD_END\])/o\1*\2/
+        s/[1-4=.KFB]o(.*\[FIELD_END\])/*o\1/
+        s/o[1-4=.KFB](.*\[FIELD_END\])/o*\1/
+        s/[1-4=.KFB](.{79})o(.*\[FIELD_END\])/*\1o\2/
+        s/o(.{79})[1-4=.KFB](.*\[FIELD_END\])/o\1*\2/
         b print_flashback
     }
     /fourth_bomb_blast_1/ {
         s/fourth_bomb_blast_1/fourth_bomb_blast_/
-        s/[1-4=.]\*o(.*\[FIELD_END\])/**o\1/
-        s/o\*[1-4=.](.*\[FIELD_END\])/o**\1/
-        s/[1-4=.](.{79}\*.{79})o(.*\[FIELD_END\])/*\1o\2/
-        s/o(.{79}\*.{79})[1-4=.](.*\[FIELD_END\])/o\1*\2/
+        s/[1-4=.KFB]\*o(.*\[FIELD_END\])/**o\1/
+        s/o\*[1-4=.KFB](.*\[FIELD_END\])/o**\1/
+        s/[1-4=.KFB](.{79}\*.{79})o(.*\[FIELD_END\])/*\1o\2/
+        s/o(.{79}\*.{79})[1-4=.KFB](.*\[FIELD_END\])/o\1*\2/
         b print_flashback
     }
     /fourth_bomb_blast_/ {
@@ -772,18 +771,18 @@ b  ai_cmds_completed
 :fourth_commit_suicide
     /fourth_bomb_blast_11/ {
         s/fourth_bomb_blast_11/fourth_bomb_blast_1/
-        s/[1-4=.]4(.*\[FIELD_END\])/*4\1/
-        s/4[1-4=.](.*\[FIELD_END\])/4*\1/
-        s/[1-4=.](.{79})4(.*\[FIELD_END\])/*\14\2/
-        s/4(.{79})[1-4=.](.*\[FIELD_END\])/4\1*\2/
+        s/[1-4=.KFB]4(.*\[FIELD_END\])/*4\1/
+        s/4[1-4=.KFB](.*\[FIELD_END\])/4*\1/
+        s/[1-4=.KFB](.{79})4(.*\[FIELD_END\])/*\14\2/
+        s/4(.{79})[1-4=.KFB](.*\[FIELD_END\])/4\1*\2/
         b print_flashback
     }
     /fourth_bomb_blast_1/ {
         s/fourth_bomb_blast_1/fourth_bomb_blast_/
-        s/[1-4=.]\*4(.*\[FIELD_END\])/**4\1/
-        s/4\*[1-4=.](.*\[FIELD_END\])/4**\1/
-        s/[1-4=.](.{79}\*.{79})4(.*\[FIELD_END\])/*\14\2/
-        s/4(.{79}\*.{79})[1-4=.](.*\[FIELD_END\])/4\1*\2/
+        s/[1-4=.KFB]\*4(.*\[FIELD_END\])/**4\1/
+        s/4\*[1-4=.KFB](.*\[FIELD_END\])/4**\1/
+        s/[1-4=.KFB](.{79}\*.{79})4(.*\[FIELD_END\])/*\14\2/
+        s/4(.{79}\*.{79})[1-4=.KFB](.*\[FIELD_END\])/4\1*\2/
         b print_flashback
     }
     /fourth_bomb_blast_/ {
@@ -1250,6 +1249,7 @@ b  ai_cmds_completed
     /\[ai_2_goal_plant_bomb\]/! {
       /[24]([.KFB]?|.{79}|.{79}[.KFB].{79})[24].*\[FIELD_END\]/ {
           s/\[ai_2_goal_(line|shift)_(up|down|right|left)\]//g
+          s/\[ai_2_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
           s/$/[ai_2_goal_plant_bomb]/
       }
     }
@@ -1278,6 +1278,8 @@ b  ai_cmds_completed
     /\[ai_2_cmd_query/! {
         /\[ai_2_goal_plant_bomb\]/ {
             s/\[ai_2_goal_plant_bomb\]//
+            s/\[ai_2_goal_(line|shift)_(up|down|right|left)\]//g
+            s/\[ai_2_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
             s/$/\[ai_2_cmd_query_!plant\]/
             #go_away_way
             /[.KFB].{79}[.KFB]2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!left_!up\]/     }
@@ -1290,8 +1292,10 @@ b  ai_cmds_completed
             /[.KFB][.KFB].{78}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up_!right\]/    }
             /[.KFB][.KFB][.KFB]2/    { s/(\[ai_2_cmd_query_!plant)\]/\1_!left_!left\]/   }
             /2[.KFB][.KFB][.KFB]/    { s/(\[ai_2_cmd_query_!plant)\]/\1_!right_!right\]/ }
-            /2.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down\]/    }
-            /[.KFB].{79}[.KFB].{79}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up\]/      }
+            /2.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down_!down\]/    }
+            /[.KFB].{79}[.KFB].{79}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up_!up\]/      }
+            /2.{79}[.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down\]/    }
+            /[.KFB].{79}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up\]/      }
         }
         /\[ai_2_goal_line_up\]/ {
             /[.KFB].{79}2/    { s/$/[ai_2_cmd_query_!up]/;            b a2q; }
@@ -1818,6 +1822,8 @@ b ai_2_finish
     /\[ai_3_cmd_query/! {
         /\[ai_3_goal_plant_bomb\]/ {
             s/\[ai_3_goal_plant_bomb\]//
+            s/\[ai_3_goal_(line|shift)_(up|down|right|left)\]//g
+            s/\[ai_3_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
             s/$/\[ai_3_cmd_query_!plant\]/
             #go_away_way
             /[.KFB].{79}[.KFB]3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!left_!up\]/     }
@@ -1830,8 +1836,10 @@ b ai_2_finish
             /[.KFB][.KFB].{78}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up_!right\]/    }
             /[.KFB][.KFB][.KFB]3/    { s/(\[ai_3_cmd_query_!plant)\]/\1_!left_!left\]/   }
             /3[.KFB][.KFB][.KFB]/    { s/(\[ai_3_cmd_query_!plant)\]/\1_!right_!right\]/ }
-            /3.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down\]/    }
-            /[.KFB].{79}[.KFB].{79}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up\]/      }
+            /3.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down_!down\]/    }
+            /[.KFB].{79}[.KFB].{79}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up_!up\]/      }
+            /3.{79}[.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down\]/    }
+            /[.KFB].{79}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up\]/      }
         }
         /\[ai_3_goal_line_up\]/ {            
             /[.KFB].{79}3/    { s/$/[ai_3_cmd_query_!up]/;            b a3q; }
@@ -2356,6 +2364,8 @@ b ai_3_finish
     /\[ai_4_cmd_query/! {
         /\[ai_4_goal_plant_bomb\]/ {
             s/\[ai_4_goal_plant_bomb\]//
+            s/\[ai_4_goal_(line|shift)_(up|down|right|left)\]//g
+            s/\[ai_4_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
             s/$/\[ai_4_cmd_query_!plant\]/
             #go_away_way
             /[.KFB].{79}[.KFB]4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!left_!up\]/     }
@@ -2368,8 +2378,10 @@ b ai_3_finish
             /[.KFB][.KFB].{78}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up_!right\]/    }
             /[.KFB][.KFB][.KFB]4/    { s/(\[ai_4_cmd_query_!plant)\]/\1_!left_!left\]/   }
             /4[.KFB][.KFB][.KFB]/    { s/(\[ai_4_cmd_query_!plant)\]/\1_!right_!right\]/ }
-            /4.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down\]/    }
-            /[.KFB].{79}[.KFB].{79}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up\]/      }
+            /4.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down_!down\]/    }
+            /[.KFB].{79}[.KFB].{79}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up_!up\]/      }
+            /4.{79}[.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down\]/    }
+            /[.KFB].{79}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up\]/      }
         }
         /\[ai_4_goal_line_up\]/ {            
             /[.KFB].{79}4/    { s/$/[ai_4_cmd_query_!up]/;            b a4q; }
@@ -2805,7 +2817,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:02,25,(.):SUNOB\]#{79}\n.{79}\n#.{72})./\1\2/
   s/(\[BONUS:02,2[67],(.):SUNOB\]#{79}\n.{79}\n#.{74})./\1\2/
 
-  s/(\[BONUS:03,01,(.):SUNOB\]#{79}\n(.{79}\n){2}#.{1})./\1\2/
+  s/(\[BONUS:03,01,(.):SUNOB\]#{79}\n(.{79}\n){2}#)./\1\2/
   s/(\[BONUS:03,02,(.):SUNOB\]#{79}\n(.{79}\n){2}#.{3})./\1\2/
   s/(\[BONUS:03,03,(.):SUNOB\]#{79}\n(.{79}\n){2}#.{6})./\1\2/
   s/(\[BONUS:03,04,(.):SUNOB\]#{79}\n(.{79}\n){2}#.{9})./\1\2/
@@ -2833,7 +2845,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:03,26,(.):SUNOB\]#{79}\n(.{79}\n){2}#.{74})./\1\2/
   s/(\[BONUS:03,27,(.):SUNOB\]#{79}\n(.{79}\n){2}#.{76})./\1\2/
 
-  s/(\[BONUS:04,01,(.):SUNOB\]#{79}\n(.{79}\n){3}#.{1})./\1\2/
+  s/(\[BONUS:04,01,(.):SUNOB\]#{79}\n(.{79}\n){3}#)./\1\2/
   s/(\[BONUS:04,02,(.):SUNOB\]#{79}\n(.{79}\n){3}#.{3})./\1\2/
   s/(\[BONUS:04,03,(.):SUNOB\]#{79}\n(.{79}\n){3}#.{6})./\1\2/
   s/(\[BONUS:04,04,(.):SUNOB\]#{79}\n(.{79}\n){3}#.{9})./\1\2/
@@ -2861,7 +2873,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:04,26,(.):SUNOB\]#{79}\n(.{79}\n){3}#.{74})./\1\2/
   s/(\[BONUS:04,27,(.):SUNOB\]#{79}\n(.{79}\n){3}#.{76})./\1\2/
 
-  s/(\[BONUS:05,01,(.):SUNOB\]#{79}\n(.{79}\n){4}#.{1})./\1\2/
+  s/(\[BONUS:05,01,(.):SUNOB\]#{79}\n(.{79}\n){4}#)./\1\2/
   s/(\[BONUS:05,02,(.):SUNOB\]#{79}\n(.{79}\n){4}#.{3})./\1\2/
   s/(\[BONUS:05,03,(.):SUNOB\]#{79}\n(.{79}\n){4}#.{6})./\1\2/
   s/(\[BONUS:05,04,(.):SUNOB\]#{79}\n(.{79}\n){4}#.{9})./\1\2/
@@ -2889,7 +2901,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:05,26,(.):SUNOB\]#{79}\n(.{79}\n){4}#.{74})./\1\2/
   s/(\[BONUS:05,27,(.):SUNOB\]#{79}\n(.{79}\n){4}#.{76})./\1\2/
 
-  s/(\[BONUS:06,01,(.):SUNOB\]#{79}\n(.{79}\n){5}#.{1})./\1\2/
+  s/(\[BONUS:06,01,(.):SUNOB\]#{79}\n(.{79}\n){5}#)./\1\2/
   s/(\[BONUS:06,02,(.):SUNOB\]#{79}\n(.{79}\n){5}#.{3})./\1\2/
   s/(\[BONUS:06,03,(.):SUNOB\]#{79}\n(.{79}\n){5}#.{6})./\1\2/
   s/(\[BONUS:06,04,(.):SUNOB\]#{79}\n(.{79}\n){5}#.{9})./\1\2/
@@ -2917,7 +2929,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:06,26,(.):SUNOB\]#{79}\n(.{79}\n){5}#.{74})./\1\2/
   s/(\[BONUS:06,27,(.):SUNOB\]#{79}\n(.{79}\n){5}#.{76})./\1\2/
 
-  s/(\[BONUS:07,01,(.):SUNOB\]#{79}\n(.{79}\n){6}#.{1})./\1\2/
+  s/(\[BONUS:07,01,(.):SUNOB\]#{79}\n(.{79}\n){6}#)./\1\2/
   s/(\[BONUS:07,02,(.):SUNOB\]#{79}\n(.{79}\n){6}#.{3})./\1\2/
   s/(\[BONUS:07,03,(.):SUNOB\]#{79}\n(.{79}\n){6}#.{6})./\1\2/
   s/(\[BONUS:07,04,(.):SUNOB\]#{79}\n(.{79}\n){6}#.{9})./\1\2/
@@ -2945,7 +2957,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:07,26,(.):SUNOB\]#{79}\n(.{79}\n){6}#.{74})./\1\2/
   s/(\[BONUS:07,27,(.):SUNOB\]#{79}\n(.{79}\n){6}#.{76})./\1\2/
 
-  s/(\[BONUS:08,01,(.):SUNOB\]#{79}\n(.{79}\n){7}#.{1})./\1\2/
+  s/(\[BONUS:08,01,(.):SUNOB\]#{79}\n(.{79}\n){7}#)./\1\2/
   s/(\[BONUS:08,02,(.):SUNOB\]#{79}\n(.{79}\n){7}#.{3})./\1\2/
   s/(\[BONUS:08,03,(.):SUNOB\]#{79}\n(.{79}\n){7}#.{6})./\1\2/
   s/(\[BONUS:08,04,(.):SUNOB\]#{79}\n(.{79}\n){7}#.{9})./\1\2/
@@ -2973,7 +2985,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:08,26,(.):SUNOB\]#{79}\n(.{79}\n){7}#.{74})./\1\2/
   s/(\[BONUS:08,27,(.):SUNOB\]#{79}\n(.{79}\n){7}#.{76})./\1\2/
 
-  s/(\[BONUS:09,01,(.):SUNOB\]#{79}\n(.{79}\n){8}#.{1})./\1\2/
+  s/(\[BONUS:09,01,(.):SUNOB\]#{79}\n(.{79}\n){8}#)./\1\2/
   s/(\[BONUS:09,02,(.):SUNOB\]#{79}\n(.{79}\n){8}#.{3})./\1\2/
   s/(\[BONUS:09,03,(.):SUNOB\]#{79}\n(.{79}\n){8}#.{6})./\1\2/
   s/(\[BONUS:09,04,(.):SUNOB\]#{79}\n(.{79}\n){8}#.{9})./\1\2/
@@ -3001,7 +3013,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:09,26,(.):SUNOB\]#{79}\n(.{79}\n){8}#.{74})./\1\2/
   s/(\[BONUS:09,27,(.):SUNOB\]#{79}\n(.{79}\n){8}#.{76})./\1\2/
 
-  s/(\[BONUS:10,01,(.):SUNOB\]#{79}\n(.{79}\n){9}#.{1})./\1\2/
+  s/(\[BONUS:10,01,(.):SUNOB\]#{79}\n(.{79}\n){9}#)./\1\2/
   s/(\[BONUS:10,02,(.):SUNOB\]#{79}\n(.{79}\n){9}#.{3})./\1\2/
   s/(\[BONUS:10,03,(.):SUNOB\]#{79}\n(.{79}\n){9}#.{6})./\1\2/
   s/(\[BONUS:10,04,(.):SUNOB\]#{79}\n(.{79}\n){9}#.{9})./\1\2/
@@ -3029,7 +3041,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:10,26,(.):SUNOB\]#{79}\n(.{79}\n){9}#.{74})./\1\2/
   s/(\[BONUS:10,27,(.):SUNOB\]#{79}\n(.{79}\n){9}#.{76})./\1\2/
 
-  s/(\[BONUS:11,01,(.):SUNOB\]#{79}\n(.{79}\n){10}#.{1})./\1\2/
+  s/(\[BONUS:11,01,(.):SUNOB\]#{79}\n(.{79}\n){10}#)./\1\2/
   s/(\[BONUS:11,02,(.):SUNOB\]#{79}\n(.{79}\n){10}#.{3})./\1\2/
   s/(\[BONUS:11,03,(.):SUNOB\]#{79}\n(.{79}\n){10}#.{6})./\1\2/
   s/(\[BONUS:11,04,(.):SUNOB\]#{79}\n(.{79}\n){10}#.{9})./\1\2/
@@ -3057,7 +3069,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:11,26,(.):SUNOB\]#{79}\n(.{79}\n){10}#.{74})./\1\2/
   s/(\[BONUS:11,27,(.):SUNOB\]#{79}\n(.{79}\n){10}#.{76})./\1\2/
 
-  s/(\[BONUS:12,01,(.):SUNOB\]#{79}\n(.{79}\n){11}#.{1})./\1\2/
+  s/(\[BONUS:12,01,(.):SUNOB\]#{79}\n(.{79}\n){11}#)./\1\2/
   s/(\[BONUS:12,02,(.):SUNOB\]#{79}\n(.{79}\n){11}#.{3})./\1\2/
   s/(\[BONUS:12,03,(.):SUNOB\]#{79}\n(.{79}\n){11}#.{6})./\1\2/
   s/(\[BONUS:12,04,(.):SUNOB\]#{79}\n(.{79}\n){11}#.{9})./\1\2/
@@ -3085,7 +3097,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:12,26,(.):SUNOB\]#{79}\n(.{79}\n){11}#.{74})./\1\2/
   s/(\[BONUS:12,27,(.):SUNOB\]#{79}\n(.{79}\n){11}#.{76})./\1\2/
 
-  s/(\[BONUS:13,01,(.):SUNOB\]#{79}\n(.{79}\n){12}#.{1})./\1\2/
+  s/(\[BONUS:13,01,(.):SUNOB\]#{79}\n(.{79}\n){12}#)./\1\2/
   s/(\[BONUS:13,02,(.):SUNOB\]#{79}\n(.{79}\n){12}#.{3})./\1\2/
   s/(\[BONUS:13,03,(.):SUNOB\]#{79}\n(.{79}\n){12}#.{6})./\1\2/
   s/(\[BONUS:13,04,(.):SUNOB\]#{79}\n(.{79}\n){12}#.{9})./\1\2/
@@ -3113,7 +3125,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:13,26,(.):SUNOB\]#{79}\n(.{79}\n){12}#.{74})./\1\2/
   s/(\[BONUS:13,27,(.):SUNOB\]#{79}\n(.{79}\n){12}#.{76})./\1\2/
 
-  s/(\[BONUS:14,01,(.):SUNOB\]#{79}\n(.{79}\n){13}#.{1})./\1\2/
+  s/(\[BONUS:14,01,(.):SUNOB\]#{79}\n(.{79}\n){13}#)./\1\2/
   s/(\[BONUS:14,02,(.):SUNOB\]#{79}\n(.{79}\n){13}#.{3})./\1\2/
   s/(\[BONUS:14,03,(.):SUNOB\]#{79}\n(.{79}\n){13}#.{6})./\1\2/
   s/(\[BONUS:14,04,(.):SUNOB\]#{79}\n(.{79}\n){13}#.{9})./\1\2/
@@ -3141,7 +3153,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:14,26,(.):SUNOB\]#{79}\n(.{79}\n){13}#.{74})./\1\2/
   s/(\[BONUS:14,27,(.):SUNOB\]#{79}\n(.{79}\n){13}#.{76})./\1\2/
 
-  s/(\[BONUS:15,01,(.):SUNOB\]#{79}\n(.{79}\n){14}#.{1})./\1\2/
+  s/(\[BONUS:15,01,(.):SUNOB\]#{79}\n(.{79}\n){14}#)./\1\2/
   s/(\[BONUS:15,02,(.):SUNOB\]#{79}\n(.{79}\n){14}#.{3})./\1\2/
   s/(\[BONUS:15,03,(.):SUNOB\]#{79}\n(.{79}\n){14}#.{6})./\1\2/
   s/(\[BONUS:15,04,(.):SUNOB\]#{79}\n(.{79}\n){14}#.{9})./\1\2/
@@ -3169,7 +3181,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:15,26,(.):SUNOB\]#{79}\n(.{79}\n){14}#.{74})./\1\2/
   s/(\[BONUS:15,27,(.):SUNOB\]#{79}\n(.{79}\n){14}#.{76})./\1\2/
 
-  s/(\[BONUS:16,01,(.):SUNOB\]#{79}\n(.{79}\n){15}#.{1})./\1\2/
+  s/(\[BONUS:16,01,(.):SUNOB\]#{79}\n(.{79}\n){15}#)./\1\2/
   s/(\[BONUS:16,02,(.):SUNOB\]#{79}\n(.{79}\n){15}#.{3})./\1\2/
   s/(\[BONUS:16,03,(.):SUNOB\]#{79}\n(.{79}\n){15}#.{6})./\1\2/
   s/(\[BONUS:16,04,(.):SUNOB\]#{79}\n(.{79}\n){15}#.{9})./\1\2/
@@ -3197,7 +3209,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:16,26,(.):SUNOB\]#{79}\n(.{79}\n){15}#.{74})./\1\2/
   s/(\[BONUS:16,27,(.):SUNOB\]#{79}\n(.{79}\n){15}#.{76})./\1\2/
 
-  s/(\[BONUS:17,01,(.):SUNOB\]#{79}\n(.{79}\n){16}#.{1})./\1\2/
+  s/(\[BONUS:17,01,(.):SUNOB\]#{79}\n(.{79}\n){16}#)./\1\2/
   s/(\[BONUS:17,02,(.):SUNOB\]#{79}\n(.{79}\n){16}#.{3})./\1\2/
   s/(\[BONUS:17,03,(.):SUNOB\]#{79}\n(.{79}\n){16}#.{6})./\1\2/
   s/(\[BONUS:17,04,(.):SUNOB\]#{79}\n(.{79}\n){16}#.{9})./\1\2/
@@ -3225,7 +3237,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:17,26,(.):SUNOB\]#{79}\n(.{79}\n){16}#.{74})./\1\2/
   s/(\[BONUS:17,27,(.):SUNOB\]#{79}\n(.{79}\n){16}#.{76})./\1\2/
 
-  s/(\[BONUS:18,01,(.):SUNOB\]#{79}\n(.{79}\n){17}#.{1})./\1\2/
+  s/(\[BONUS:18,01,(.):SUNOB\]#{79}\n(.{79}\n){17}#)./\1\2/
   s/(\[BONUS:18,02,(.):SUNOB\]#{79}\n(.{79}\n){17}#.{3})./\1\2/
   s/(\[BONUS:18,03,(.):SUNOB\]#{79}\n(.{79}\n){17}#.{6})./\1\2/
   s/(\[BONUS:18,04,(.):SUNOB\]#{79}\n(.{79}\n){17}#.{9})./\1\2/
@@ -3253,7 +3265,7 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/(\[BONUS:18,26,(.):SUNOB\]#{79}\n(.{79}\n){17}#.{74})./\1\2/
   s/(\[BONUS:18,27,(.):SUNOB\]#{79}\n(.{79}\n){17}#.{76})./\1\2/
 
-  s/(\[BONUS:19,01,(.):SUNOB\]#{79}\n(.{79}\n){18}#.{1})./\1\2/
+  s/(\[BONUS:19,01,(.):SUNOB\]#{79}\n(.{79}\n){18}#)./\1\2/
   s/(\[BONUS:19,02,(.):SUNOB\]#{79}\n(.{79}\n){18}#.{3})./\1\2/
   s/(\[BONUS:19,03,(.):SUNOB\]#{79}\n(.{79}\n){18}#.{6})./\1\2/
   s/(\[BONUS:19,04,(.):SUNOB\]#{79}\n(.{79}\n){18}#.{9})./\1\2/
