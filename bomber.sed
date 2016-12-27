@@ -546,42 +546,78 @@ b  ai_cmds_completed
     }
     /first_bomb_blast_1/ {
         s/first_bomb_blast_1/first_bomb_blast_/
+        /\[FIRST_BONUS:PYROMANIAC:BF\]/!b check_next_isis_1
+        s/[1-4=.KFB]([^#]{2})@(.*\[FIELD_END\])/*\1@\2/
+        s/@([^#]{2})[1-4=.KFB](.*\[FIELD_END\])/@\1*\2/
+        s/[1-4=.KFB](.{79}[^#].{79}[^#].{79})@(.*\[FIELD_END\])/*\1@\2/
+        s/@(.{79}[^#].{79}[^#].{79})[1-4=.KFB](.*\[FIELD_END\])/@\1*\2/
+
+        s/k([^#]{2})@(.*\[FIELD_END\])/q\1@\2/
+        s/@([^#]{2})k(.*\[FIELD_END\])/@\1q\2/
+        s/k(.{79}[^#].{79}[^#].{79})@(.*\[FIELD_END\])/q\1@\2/
+        s/@(.{79}[^#].{79}[^#].{79})k(.*\[FIELD_END\])/@\1q\2/
+
+        s/f([^#]{2})@(.*\[FIELD_END\])/v\1@\2/
+        s/@([^#]{2})f(.*\[FIELD_END\])/@\1v\2/
+        s/f(.{79}[^#].{79}[^#].{79})@(.*\[FIELD_END\])/v\1@\2/
+        s/@(.{79}[^#].{79}[^#].{79})f(.*\[FIELD_END\])/@\1v\2/
+
+        s/b([^#]{2})@(.*\[FIELD_END\])/p\1@\2/
+        s/@([^#]{2})b(.*\[FIELD_END\])/@\1p\2/
+        s/b(.{79}[^#].{79}[^#].{79})@(.*\[FIELD_END\])/p\1@\2/
+        s/@(.{79}[^#].{79}[^#].{79})b(.*\[FIELD_END\])/@\1p\2/
         b check_next_isis_1
     }
     /first_bomb_blast_/ {
         s/\[status_first_bomb_blast_\]//
-        s/\*([^#])@(.*\[FIELD_END\])/.\1@\2/
-        s/q([^#])@(.*\[FIELD_END\])/K\1@\2/
-        s/v([^#])@(.*\[FIELD_END\])/F\1@\2/
-        s/p([^#])@(.*\[FIELD_END\])/B\1@\2/
-            s/\*@(.*\[FIELD_END\])/.@\1/
-            s/q@(.*\[FIELD_END\])/K@\1/
-            s/v@(.*\[FIELD_END\])/F@\1/
-            s/p@(.*\[FIELD_END\])/B@\1/
-        s/@([^#])\*(.*\[FIELD_END\])/@\1.\2/
-        s/@([^#])q(.*\[FIELD_END\])/@\1K\2/
-        s/@([^#])v(.*\[FIELD_END\])/@\1F\2/
-        s/@([^#])p(.*\[FIELD_END\])/@\1B\2/
-            s/@\*(.*\[FIELD_END\])/@.\1/
-            s/@q(.*\[FIELD_END\])/@K\1/
-            s/@v(.*\[FIELD_END\])/@F\1/
-            s/@p(.*\[FIELD_END\])/@B\1/
-        s/\*(.{79}[^#].{79})@(.*\[FIELD_END\])/.\1@\2/
-        s/q(.{79}[^#].{79})@(.*\[FIELD_END\])/K\1@\2/
-        s/v(.{79}[^#].{79})@(.*\[FIELD_END\])/F\1@\2/
-        s/p(.{79}[^#].{79})@(.*\[FIELD_END\])/B\1@\2/
-            s/\*(.{79})@(.*\[FIELD_END\])/.\1@\2/
-            s/q(.{79})@(.*\[FIELD_END\])/K\1@\2/
-            s/v(.{79})@(.*\[FIELD_END\])/F\1@\2/
-            s/p(.{79})@(.*\[FIELD_END\])/B\1@\2/
-        s/@(.{79}[^#].{79})\*(.*\[FIELD_END\])/@\1.\2/
-        s/@(.{79}[^#].{79})q(.*\[FIELD_END\])/@\1K\2/
-        s/@(.{79}[^#].{79})v(.*\[FIELD_END\])/@\1F\2/
-        s/@(.{79}[^#].{79})p(.*\[FIELD_END\])/@\1B\2/
-            s/@(.{79})\*(.*\[FIELD_END\])/@\1.\2/
-            s/@(.{79})q(.*\[FIELD_END\])/@\1K\2/
-            s/@(.{79})v(.*\[FIELD_END\])/@\1F\2/
-            s/@(.{79})p(.*\[FIELD_END\])/@\1B\2/
+        s/\*([^#]{2})@(.*\[FIELD_END\])/.\1@\2/
+        s/q([^#]{2})@(.*\[FIELD_END\])/K\1@\2/
+        s/v([^#]{2})@(.*\[FIELD_END\])/F\1@\2/
+        s/p([^#]{2})@(.*\[FIELD_END\])/B\1@\2/
+            s/\*([^#])@(.*\[FIELD_END\])/.\1@\2/
+            s/q([^#])@(.*\[FIELD_END\])/K\1@\2/
+            s/v([^#])@(.*\[FIELD_END\])/F\1@\2/
+            s/p([^#])@(.*\[FIELD_END\])/B\1@\2/
+                s/\*@(.*\[FIELD_END\])/.@\1/
+                s/q@(.*\[FIELD_END\])/K@\1/
+                s/v@(.*\[FIELD_END\])/F@\1/
+                s/p@(.*\[FIELD_END\])/B@\1/
+        s/@([^#]{2})\*(.*\[FIELD_END\])/@\1.\2/
+        s/@([^#]{2})q(.*\[FIELD_END\])/@\1K\2/
+        s/@([^#]{2})v(.*\[FIELD_END\])/@\1F\2/
+        s/@([^#]{2})p(.*\[FIELD_END\])/@\1B\2/
+            s/@([^#])\*(.*\[FIELD_END\])/@\1.\2/
+            s/@([^#])q(.*\[FIELD_END\])/@\1K\2/
+            s/@([^#])v(.*\[FIELD_END\])/@\1F\2/
+            s/@([^#])p(.*\[FIELD_END\])/@\1B\2/
+                s/@\*(.*\[FIELD_END\])/@.\1/
+                s/@q(.*\[FIELD_END\])/@K\1/
+                s/@v(.*\[FIELD_END\])/@F\1/
+                s/@p(.*\[FIELD_END\])/@B\1/
+        s/\*(.{79}[^#].{79}[^#].{79})@(.*\[FIELD_END\])/.\1@\2/
+        s/q(.{79}[^#].{79}[^#].{79})@(.*\[FIELD_END\])/K\1@\2/
+        s/v(.{79}[^#].{79}[^#].{79})@(.*\[FIELD_END\])/F\1@\2/
+        s/p(.{79}[^#].{79}[^#].{79})@(.*\[FIELD_END\])/B\1@\2/
+            s/\*(.{79}[^#].{79})@(.*\[FIELD_END\])/.\1@\2/
+            s/q(.{79}[^#].{79})@(.*\[FIELD_END\])/K\1@\2/
+            s/v(.{79}[^#].{79})@(.*\[FIELD_END\])/F\1@\2/
+            s/p(.{79}[^#].{79})@(.*\[FIELD_END\])/B\1@\2/
+                s/\*(.{79})@(.*\[FIELD_END\])/.\1@\2/
+                s/q(.{79})@(.*\[FIELD_END\])/K\1@\2/
+                s/v(.{79})@(.*\[FIELD_END\])/F\1@\2/
+                s/p(.{79})@(.*\[FIELD_END\])/B\1@\2/
+        s/@(.{79}[^#].{79}[^#].{79})\*(.*\[FIELD_END\])/@\1.\2/
+        s/@(.{79}[^#].{79}[^#].{79})q(.*\[FIELD_END\])/@\1K\2/
+        s/@(.{79}[^#].{79}[^#].{79})v(.*\[FIELD_END\])/@\1F\2/
+        s/@(.{79}[^#].{79}[^#].{79})p(.*\[FIELD_END\])/@\1B\2/
+            s/@(.{79}[^#].{79})\*(.*\[FIELD_END\])/@\1.\2/
+            s/@(.{79}[^#].{79})q(.*\[FIELD_END\])/@\1K\2/
+            s/@(.{79}[^#].{79})v(.*\[FIELD_END\])/@\1F\2/
+            s/@(.{79}[^#].{79})p(.*\[FIELD_END\])/@\1B\2/
+                s/@(.{79})\*(.*\[FIELD_END\])/@\1.\2/
+                s/@(.{79})q(.*\[FIELD_END\])/@\1K\2/
+                s/@(.{79})v(.*\[FIELD_END\])/@\1F\2/
+                s/@(.{79})p(.*\[FIELD_END\])/@\1B\2/
         s/@(.*\[FIELD_END\])/.\1/
     }
     b check_next_isis_1
@@ -651,42 +687,78 @@ b  ai_cmds_completed
     }
     /second_bomb_blast_1/ {
         s/second_bomb_blast_1/second_bomb_blast_/
+        /\[SECOND_BONUS:PYROMANIAC:BF\]/!b check_next_isis_2
+        s/[1-4=.KFB]([^#]{2})a(.*\[FIELD_END\])/*\1a\2/
+        s/a([^#]{2})[1-4=.KFB](.*\[FIELD_END\])/a\1*\2/
+        s/[1-4=.KFB](.{79}[^#].{79}[^#].{79})a(.*\[FIELD_END\])/*\1a\2/
+        s/a(.{79}[^#].{79}[^#].{79})[1-4=.KFB](.*\[FIELD_END\])/a\1*\2/
+
+        s/k([^#]{2})a(.*\[FIELD_END\])/q\1a\2/
+        s/a([^#]{2})k(.*\[FIELD_END\])/a\1q\2/
+        s/k(.{79}[^#].{79}[^#].{79})a(.*\[FIELD_END\])/q\1a\2/
+        s/a(.{79}[^#].{79}[^#].{79})k(.*\[FIELD_END\])/a\1q\2/
+
+        s/f([^#]{2})a(.*\[FIELD_END\])/v\1a\2/
+        s/a([^#]{2})f(.*\[FIELD_END\])/a\1v\2/
+        s/f(.{79}[^#].{79}[^#].{79})a(.*\[FIELD_END\])/v\1a\2/
+        s/a(.{79}[^#].{79}[^#].{79})f(.*\[FIELD_END\])/a\1v\2/
+
+        s/b([^#]{2})a(.*\[FIELD_END\])/p\1a\2/
+        s/a([^#]{2})b(.*\[FIELD_END\])/a\1p\2/
+        s/b(.{79}[^#].{79}[^#].{79})a(.*\[FIELD_END\])/p\1a\2/
+        s/a(.{79}[^#].{79}[^#].{79})b(.*\[FIELD_END\])/a\1p\2/
         b check_next_isis_2
     }
     /second_bomb_blast_/ {
         s/\[status_second_bomb_blast_\]//
-        s/\*([^#])a(.*\[FIELD_END\])/.\1a\2/
-        s/q([^#])a(.*\[FIELD_END\])/K\1a\2/
-        s/v([^#])a(.*\[FIELD_END\])/F\1a\2/
-        s/p([^#])a(.*\[FIELD_END\])/B\1a\2/
-            s/\*a(.*\[FIELD_END\])/.a\1/
-            s/qa(.*\[FIELD_END\])/Ka\1/
-            s/va(.*\[FIELD_END\])/Fa\1/
-            s/pa(.*\[FIELD_END\])/Ba\1/
-        s/a([^#])\*(.*\[FIELD_END\])/a\1.\2/
-        s/a([^#])q(.*\[FIELD_END\])/a\1K\2/
-        s/a([^#])v(.*\[FIELD_END\])/a\1F\2/
-        s/a([^#])p(.*\[FIELD_END\])/a\1B\2/
-            s/a\*(.*\[FIELD_END\])/a.\1/
-            s/aq(.*\[FIELD_END\])/aK\1/
-            s/av(.*\[FIELD_END\])/aF\1/
-            s/ap(.*\[FIELD_END\])/aB\1/
-        s/\*(.{79}[^#].{79})a(.*\[FIELD_END\])/.\1a\2/
-        s/q(.{79}[^#].{79})a(.*\[FIELD_END\])/K\1a\2/
-        s/v(.{79}[^#].{79})a(.*\[FIELD_END\])/F\1a\2/
-        s/p(.{79}[^#].{79})a(.*\[FIELD_END\])/B\1a\2/
-            s/\*(.{79})a(.*\[FIELD_END\])/.\1a\2/
-            s/q(.{79})a(.*\[FIELD_END\])/K\1a\2/
-            s/v(.{79})a(.*\[FIELD_END\])/F\1a\2/
-            s/p(.{79})a(.*\[FIELD_END\])/B\1a\2/
-        s/a(.{79}[^#].{79})\*(.*\[FIELD_END\])/a\1.\2/
-        s/a(.{79}[^#].{79})q(.*\[FIELD_END\])/a\1K\2/
-        s/a(.{79}[^#].{79})v(.*\[FIELD_END\])/a\1F\2/
-        s/a(.{79}[^#].{79})p(.*\[FIELD_END\])/a\1B\2/
-            s/a(.{79})\*(.*\[FIELD_END\])/a\1.\2/
-            s/a(.{79})q(.*\[FIELD_END\])/a\1K\2/
-            s/a(.{79})v(.*\[FIELD_END\])/a\1F\2/
-            s/a(.{79})p(.*\[FIELD_END\])/a\1B\2/
+        s/\*([^#]{2})a(.*\[FIELD_END\])/.\1a\2/
+        s/q([^#]{2})a(.*\[FIELD_END\])/K\1a\2/
+        s/v([^#]{2})a(.*\[FIELD_END\])/F\1a\2/
+        s/p([^#]{2})a(.*\[FIELD_END\])/B\1a\2/
+            s/\*([^#])a(.*\[FIELD_END\])/.\1a\2/
+            s/q([^#])a(.*\[FIELD_END\])/K\1a\2/
+            s/v([^#])a(.*\[FIELD_END\])/F\1a\2/
+            s/p([^#])a(.*\[FIELD_END\])/B\1a\2/
+                s/\*a(.*\[FIELD_END\])/.a\1/
+                s/qa(.*\[FIELD_END\])/Ka\1/
+                s/va(.*\[FIELD_END\])/Fa\1/
+                s/pa(.*\[FIELD_END\])/Ba\1/
+        s/a([^#]{2})\*(.*\[FIELD_END\])/a\1.\2/
+        s/a([^#]{2})q(.*\[FIELD_END\])/a\1K\2/
+        s/a([^#]{2})v(.*\[FIELD_END\])/a\1F\2/
+        s/a([^#]{2})p(.*\[FIELD_END\])/a\1B\2/
+            s/a([^#])\*(.*\[FIELD_END\])/a\1.\2/
+            s/a([^#])q(.*\[FIELD_END\])/a\1K\2/
+            s/a([^#])v(.*\[FIELD_END\])/a\1F\2/
+            s/a([^#])p(.*\[FIELD_END\])/a\1B\2/
+                s/a\*(.*\[FIELD_END\])/a.\1/
+                s/aq(.*\[FIELD_END\])/aK\1/
+                s/av(.*\[FIELD_END\])/aF\1/
+                s/ap(.*\[FIELD_END\])/aB\1/
+        s/\*(.{79}[^#].{79}[^#].{79})a(.*\[FIELD_END\])/.\1a\2/
+        s/q(.{79}[^#].{79}[^#].{79})a(.*\[FIELD_END\])/K\1a\2/
+        s/v(.{79}[^#].{79}[^#].{79})a(.*\[FIELD_END\])/F\1a\2/
+        s/p(.{79}[^#].{79}[^#].{79})a(.*\[FIELD_END\])/B\1a\2/
+            s/\*(.{79}[^#].{79})a(.*\[FIELD_END\])/.\1a\2/
+            s/q(.{79}[^#].{79})a(.*\[FIELD_END\])/K\1a\2/
+            s/v(.{79}[^#].{79})a(.*\[FIELD_END\])/F\1a\2/
+            s/p(.{79}[^#].{79})a(.*\[FIELD_END\])/B\1a\2/
+                s/\*(.{79})a(.*\[FIELD_END\])/.\1a\2/
+                s/q(.{79})a(.*\[FIELD_END\])/K\1a\2/
+                s/v(.{79})a(.*\[FIELD_END\])/F\1a\2/
+                s/p(.{79})a(.*\[FIELD_END\])/B\1a\2/
+        s/a(.{79}[^#].{79}[^#].{79})\*(.*\[FIELD_END\])/a\1.\2/
+        s/a(.{79}[^#].{79}[^#].{79})q(.*\[FIELD_END\])/a\1K\2/
+        s/a(.{79}[^#].{79}[^#].{79})v(.*\[FIELD_END\])/a\1F\2/
+        s/a(.{79}[^#].{79}[^#].{79})p(.*\[FIELD_END\])/a\1B\2/
+            s/a(.{79}[^#].{79})\*(.*\[FIELD_END\])/a\1.\2/
+            s/a(.{79}[^#].{79})q(.*\[FIELD_END\])/a\1K\2/
+            s/a(.{79}[^#].{79})v(.*\[FIELD_END\])/a\1F\2/
+            s/a(.{79}[^#].{79})p(.*\[FIELD_END\])/a\1B\2/
+                s/a(.{79})\*(.*\[FIELD_END\])/a\1.\2/
+                s/a(.{79})q(.*\[FIELD_END\])/a\1K\2/
+                s/a(.{79})v(.*\[FIELD_END\])/a\1F\2/
+                s/a(.{79})p(.*\[FIELD_END\])/a\1B\2/
         s/a(.*\[FIELD_END\])/.\1/
     }
     b check_next_isis_2
@@ -756,42 +828,78 @@ b  ai_cmds_completed
     }
     /third_bomb_blast_1/ {
         s/third_bomb_blast_1/third_bomb_blast_/
+        /\[THIRD_BONUS:PYROMANIAC:BF\]/!b check_next_isis_3
+        s/[1-4=.KFB]([^#]{2})0(.*\[FIELD_END\])/*\10\2/
+        s/0([^#]{2})[1-4=.KFB](.*\[FIELD_END\])/0\1*\2/
+        s/[1-4=.KFB](.{79}[^#].{79}[^#].{79})0(.*\[FIELD_END\])/*\10\2/
+        s/0(.{79}[^#].{79}[^#].{79})[1-4=.KFB](.*\[FIELD_END\])/0\1*\2/
+
+        s/k([^#]{2})0(.*\[FIELD_END\])/q\10\2/
+        s/0([^#]{2})k(.*\[FIELD_END\])/0\1q\2/
+        s/k(.{79}[^#].{79}[^#].{79})0(.*\[FIELD_END\])/q\10\2/
+        s/0(.{79}[^#].{79}[^#].{79})k(.*\[FIELD_END\])/0\1q\2/
+
+        s/f([^#]{2})0(.*\[FIELD_END\])/v\10\2/
+        s/0([^#]{2})f(.*\[FIELD_END\])/0\1v\2/
+        s/f(.{79}[^#].{79}[^#].{79})0(.*\[FIELD_END\])/v\10\2/
+        s/0(.{79}[^#].{79}[^#].{79})f(.*\[FIELD_END\])/0\1v\2/
+
+        s/b([^#]{2})0(.*\[FIELD_END\])/p\10\2/
+        s/0([^#]{2})b(.*\[FIELD_END\])/0\1p\2/
+        s/b(.{79}[^#].{79}[^#].{79})0(.*\[FIELD_END\])/p\10\2/
+        s/0(.{79}[^#].{79}[^#].{79})b(.*\[FIELD_END\])/0\1p\2/
         b check_next_isis_3
     }
     /third_bomb_blast_/ {
         s/\[status_third_bomb_blast_\]//
-        s/\*([^#])0(.*\[FIELD_END\])/.\10\2/
-        s/q([^#])0(.*\[FIELD_END\])/K\10\2/
-        s/v([^#])0(.*\[FIELD_END\])/F\10\2/
-        s/p([^#])0(.*\[FIELD_END\])/B\10\2/
-            s/\*0(.*\[FIELD_END\])/.0\1/
-            s/q0(.*\[FIELD_END\])/K0\1/
-            s/v0(.*\[FIELD_END\])/F0\1/
-            s/p0(.*\[FIELD_END\])/B0\1/
-        s/0([^#])\*(.*\[FIELD_END\])/0\1.\2/
-        s/0([^#])q(.*\[FIELD_END\])/0\1K\2/
-        s/0([^#])v(.*\[FIELD_END\])/0\1F\2/
-        s/0([^#])p(.*\[FIELD_END\])/0\1B\2/
-            s/0\*(.*\[FIELD_END\])/0.\1/
-            s/0q(.*\[FIELD_END\])/0K\1/
-            s/0v(.*\[FIELD_END\])/0F\1/
-            s/0p(.*\[FIELD_END\])/0B\1/
-        s/\*(.{79}[^#].{79})0(.*\[FIELD_END\])/.\10\2/
-        s/q(.{79}[^#].{79})0(.*\[FIELD_END\])/K\10\2/
-        s/v(.{79}[^#].{79})0(.*\[FIELD_END\])/F\10\2/
-        s/p(.{79}[^#].{79})0(.*\[FIELD_END\])/B\10\2/
-            s/\*(.{79})0(.*\[FIELD_END\])/.\10\2/
-            s/q(.{79})0(.*\[FIELD_END\])/K\10\2/
-            s/v(.{79})0(.*\[FIELD_END\])/F\10\2/
-            s/p(.{79})0(.*\[FIELD_END\])/B\10\2/
-        s/0(.{79}[^#].{79})\*(.*\[FIELD_END\])/0\1.\2/
-        s/0(.{79}[^#].{79})q(.*\[FIELD_END\])/0\1K\2/
-        s/0(.{79}[^#].{79})v(.*\[FIELD_END\])/0\1F\2/
-        s/0(.{79}[^#].{79})p(.*\[FIELD_END\])/0\1B\2/
-            s/0(.{79})\*(.*\[FIELD_END\])/0\1.\2/
-            s/0(.{79})q(.*\[FIELD_END\])/0\1K\2/
-            s/0(.{79})v(.*\[FIELD_END\])/0\1F\2/
-            s/0(.{79})p(.*\[FIELD_END\])/0\1B\2/
+        s/\*([^#]{2})0(.*\[FIELD_END\])/.\10\2/
+        s/q([^#]{2})0(.*\[FIELD_END\])/K\10\2/
+        s/v([^#]{2})0(.*\[FIELD_END\])/F\10\2/
+        s/p([^#]{2})0(.*\[FIELD_END\])/B\10\2/
+            s/\*([^#])0(.*\[FIELD_END\])/.\10\2/
+            s/q([^#])0(.*\[FIELD_END\])/K\10\2/
+            s/v([^#])0(.*\[FIELD_END\])/F\10\2/
+            s/p([^#])0(.*\[FIELD_END\])/B\10\2/
+                s/\*0(.*\[FIELD_END\])/.0\1/
+                s/q0(.*\[FIELD_END\])/K0\1/
+                s/v0(.*\[FIELD_END\])/F0\1/
+                s/p0(.*\[FIELD_END\])/B0\1/
+        s/0([^#]{2})\*(.*\[FIELD_END\])/0\1.\2/
+        s/0([^#]{2})q(.*\[FIELD_END\])/0\1K\2/
+        s/0([^#]{2})v(.*\[FIELD_END\])/0\1F\2/
+        s/0([^#]{2})p(.*\[FIELD_END\])/0\1B\2/
+            s/0([^#])\*(.*\[FIELD_END\])/0\1.\2/
+            s/0([^#])q(.*\[FIELD_END\])/0\1K\2/
+            s/0([^#])v(.*\[FIELD_END\])/0\1F\2/
+            s/0([^#])p(.*\[FIELD_END\])/0\1B\2/
+                s/0\*(.*\[FIELD_END\])/0.\1/
+                s/0q(.*\[FIELD_END\])/0K\1/
+                s/0v(.*\[FIELD_END\])/0F\1/
+                s/0p(.*\[FIELD_END\])/0B\1/
+        s/\*(.{79}[^#].{79}[^#].{79})0(.*\[FIELD_END\])/.\10\2/
+        s/q(.{79}[^#].{79}[^#].{79})0(.*\[FIELD_END\])/K\10\2/
+        s/v(.{79}[^#].{79}[^#].{79})0(.*\[FIELD_END\])/F\10\2/
+        s/p(.{79}[^#].{79}[^#].{79})0(.*\[FIELD_END\])/B\10\2/
+            s/\*(.{79}[^#].{79})0(.*\[FIELD_END\])/.\10\2/
+            s/q(.{79}[^#].{79})0(.*\[FIELD_END\])/K\10\2/
+            s/v(.{79}[^#].{79})0(.*\[FIELD_END\])/F\10\2/
+            s/p(.{79}[^#].{79})0(.*\[FIELD_END\])/B\10\2/
+                s/\*(.{79})0(.*\[FIELD_END\])/.\10\2/
+                s/q(.{79})0(.*\[FIELD_END\])/K\10\2/
+                s/v(.{79})0(.*\[FIELD_END\])/F\10\2/
+                s/p(.{79})0(.*\[FIELD_END\])/B\10\2/
+        s/0(.{79}[^#].{79}[^#].{79})\*(.*\[FIELD_END\])/0\1.\2/
+        s/0(.{79}[^#].{79}[^#].{79})q(.*\[FIELD_END\])/0\1K\2/
+        s/0(.{79}[^#].{79}[^#].{79})v(.*\[FIELD_END\])/0\1F\2/
+        s/0(.{79}[^#].{79}[^#].{79})p(.*\[FIELD_END\])/0\1B\2/
+            s/0(.{79}[^#].{79})\*(.*\[FIELD_END\])/0\1.\2/
+            s/0(.{79}[^#].{79})q(.*\[FIELD_END\])/0\1K\2/
+            s/0(.{79}[^#].{79})v(.*\[FIELD_END\])/0\1F\2/
+            s/0(.{79}[^#].{79})p(.*\[FIELD_END\])/0\1B\2/
+                s/0(.{79})\*(.*\[FIELD_END\])/0\1.\2/
+                s/0(.{79})q(.*\[FIELD_END\])/0\1K\2/
+                s/0(.{79})v(.*\[FIELD_END\])/0\1F\2/
+                s/0(.{79})p(.*\[FIELD_END\])/0\1B\2/
         s/0(.*\[FIELD_END\])/.\1/
     }
     b check_next_isis_3
@@ -861,42 +969,78 @@ b  ai_cmds_completed
     }
     /fourth_bomb_blast_1/ {
         s/fourth_bomb_blast_1/fourth_bomb_blast_/
+        /\[FOURTH_BONUS:PYROMANIAC:BF\]/!b print_flashback
+        s/[1-4=.KFB]([^#]{2})o(.*\[FIELD_END\])/*\1o\2/
+        s/o([^#]{2})[1-4=.KFB](.*\[FIELD_END\])/o\1*\2/
+        s/[1-4=.KFB](.{79}[^#].{79}[^#].{79})o(.*\[FIELD_END\])/*\1o\2/
+        s/o(.{79}[^#].{79}[^#].{79})[1-4=.KFB](.*\[FIELD_END\])/o\1*\2/
+
+        s/k([^#]{2})o(.*\[FIELD_END\])/q\1o\2/
+        s/o([^#]{2})k(.*\[FIELD_END\])/o\1q\2/
+        s/k(.{79}[^#].{79}[^#].{79})o(.*\[FIELD_END\])/q\1o\2/
+        s/o(.{79}[^#].{79}[^#].{79})k(.*\[FIELD_END\])/o\1q\2/
+
+        s/f([^#]{2})o(.*\[FIELD_END\])/v\1o\2/
+        s/o([^#]{2})f(.*\[FIELD_END\])/o\1v\2/
+        s/f(.{79}[^#].{79}[^#].{79})o(.*\[FIELD_END\])/v\1o\2/
+        s/o(.{79}[^#].{79}[^#].{79})f(.*\[FIELD_END\])/o\1v\2/
+
+        s/b([^#]{2})o(.*\[FIELD_END\])/p\1o\2/
+        s/o([^#]{2})b(.*\[FIELD_END\])/o\1p\2/
+        s/b(.{79}[^#].{79}[^#].{79})o(.*\[FIELD_END\])/p\1o\2/
+        s/o(.{79}[^#].{79}[^#].{79})b(.*\[FIELD_END\])/o\1p\2/
         b print_flashback
     }
     /fourth_bomb_blast_/ {
         s/\[status_fourth_bomb_blast_\]//
-        s/\*([^#])o(.*\[FIELD_END\])/.\1o\2/
-        s/q([^#])o(.*\[FIELD_END\])/K\1o\2/
-        s/v([^#])o(.*\[FIELD_END\])/F\1o\2/
-        s/p([^#])o(.*\[FIELD_END\])/B\1o\2/
-            s/\*o(.*\[FIELD_END\])/.o\1/
-            s/qo(.*\[FIELD_END\])/Ko\1/
-            s/vo(.*\[FIELD_END\])/Fo\1/
-            s/po(.*\[FIELD_END\])/Bo\1/
-        s/o([^#])\*(.*\[FIELD_END\])/o\1.\2/
-        s/o([^#])q(.*\[FIELD_END\])/o\1K\2/
-        s/o([^#])v(.*\[FIELD_END\])/o\1F\2/
-        s/o([^#])p(.*\[FIELD_END\])/o\1B\2/
-            s/o\*(.*\[FIELD_END\])/o.\1/
-            s/oq(.*\[FIELD_END\])/oK\1/
-            s/ov(.*\[FIELD_END\])/oF\1/
-            s/op(.*\[FIELD_END\])/oB\1/
-        s/\*(.{79}[^#].{79})o(.*\[FIELD_END\])/.\1o\2/
-        s/q(.{79}[^#].{79})o(.*\[FIELD_END\])/K\1o\2/
-        s/v(.{79}[^#].{79})o(.*\[FIELD_END\])/F\1o\2/
-        s/p(.{79}[^#].{79})o(.*\[FIELD_END\])/B\1o\2/
-            s/\*(.{79})o(.*\[FIELD_END\])/.\1o\2/
-            s/q(.{79})o(.*\[FIELD_END\])/K\1o\2/
-            s/v(.{79})o(.*\[FIELD_END\])/F\1o\2/
-            s/p(.{79})o(.*\[FIELD_END\])/B\1o\2/
-        s/o(.{79}[^#].{79})\*(.*\[FIELD_END\])/o\1.\2/
-        s/o(.{79}[^#].{79})q(.*\[FIELD_END\])/o\1K\2/
-        s/o(.{79}[^#].{79})v(.*\[FIELD_END\])/o\1F\2/
-        s/o(.{79}[^#].{79})p(.*\[FIELD_END\])/o\1B\2/
-            s/o(.{79})\*(.*\[FIELD_END\])/o\1.\2/
-            s/o(.{79})q(.*\[FIELD_END\])/o\1K\2/
-            s/o(.{79})v(.*\[FIELD_END\])/o\1F\2/
-            s/o(.{79})p(.*\[FIELD_END\])/o\1B\2/
+        s/\*([^#]{2})o(.*\[FIELD_END\])/.\1o\2/
+        s/q([^#]{2})o(.*\[FIELD_END\])/K\1o\2/
+        s/v([^#]{2})o(.*\[FIELD_END\])/F\1o\2/
+        s/p([^#]{2})o(.*\[FIELD_END\])/B\1o\2/
+            s/\*([^#])o(.*\[FIELD_END\])/.\1o\2/
+            s/q([^#])o(.*\[FIELD_END\])/K\1o\2/
+            s/v([^#])o(.*\[FIELD_END\])/F\1o\2/
+            s/p([^#])o(.*\[FIELD_END\])/B\1o\2/
+                s/\*o(.*\[FIELD_END\])/.o\1/
+                s/qo(.*\[FIELD_END\])/Ko\1/
+                s/vo(.*\[FIELD_END\])/Fo\1/
+                s/po(.*\[FIELD_END\])/Bo\1/
+        s/o([^#]{2})\*(.*\[FIELD_END\])/o\1.\2/
+        s/o([^#]{2})q(.*\[FIELD_END\])/o\1K\2/
+        s/o([^#]{2})v(.*\[FIELD_END\])/o\1F\2/
+        s/o([^#]{2})p(.*\[FIELD_END\])/o\1B\2/
+            s/o([^#])\*(.*\[FIELD_END\])/o\1.\2/
+            s/o([^#])q(.*\[FIELD_END\])/o\1K\2/
+            s/o([^#])v(.*\[FIELD_END\])/o\1F\2/
+            s/o([^#])p(.*\[FIELD_END\])/o\1B\2/
+                s/o\*(.*\[FIELD_END\])/o.\1/
+                s/oq(.*\[FIELD_END\])/oK\1/
+                s/ov(.*\[FIELD_END\])/oF\1/
+                s/op(.*\[FIELD_END\])/oB\1/
+        s/\*(.{79}[^#].{79}[^#].{79})o(.*\[FIELD_END\])/.\1o\2/
+        s/q(.{79}[^#].{79}[^#].{79})o(.*\[FIELD_END\])/K\1o\2/
+        s/v(.{79}[^#].{79}[^#].{79})o(.*\[FIELD_END\])/F\1o\2/
+        s/p(.{79}[^#].{79}[^#].{79})o(.*\[FIELD_END\])/B\1o\2/
+            s/\*(.{79}[^#].{79})o(.*\[FIELD_END\])/.\1o\2/
+            s/q(.{79}[^#].{79})o(.*\[FIELD_END\])/K\1o\2/
+            s/v(.{79}[^#].{79})o(.*\[FIELD_END\])/F\1o\2/
+            s/p(.{79}[^#].{79})o(.*\[FIELD_END\])/B\1o\2/
+                s/\*(.{79})o(.*\[FIELD_END\])/.\1o\2/
+                s/q(.{79})o(.*\[FIELD_END\])/K\1o\2/
+                s/v(.{79})o(.*\[FIELD_END\])/F\1o\2/
+                s/p(.{79})o(.*\[FIELD_END\])/B\1o\2/
+        s/o(.{79}[^#].{79}[^#].{79})\*(.*\[FIELD_END\])/o\1.\2/
+        s/o(.{79}[^#].{79}[^#].{79})q(.*\[FIELD_END\])/o\1K\2/
+        s/o(.{79}[^#].{79}[^#].{79})v(.*\[FIELD_END\])/o\1F\2/
+        s/o(.{79}[^#].{79}[^#].{79})p(.*\[FIELD_END\])/o\1B\2/
+            s/o(.{79}[^#].{79})\*(.*\[FIELD_END\])/o\1.\2/
+            s/o(.{79}[^#].{79})q(.*\[FIELD_END\])/o\1K\2/
+            s/o(.{79}[^#].{79})v(.*\[FIELD_END\])/o\1F\2/
+            s/o(.{79}[^#].{79})p(.*\[FIELD_END\])/o\1B\2/
+                s/o(.{79})\*(.*\[FIELD_END\])/o\1.\2/
+                s/o(.{79})q(.*\[FIELD_END\])/o\1K\2/
+                s/o(.{79})v(.*\[FIELD_END\])/o\1F\2/
+                s/o(.{79})p(.*\[FIELD_END\])/o\1B\2/
         s/o(.*\[FIELD_END\])/.\1/
     }
     b print_flashback
