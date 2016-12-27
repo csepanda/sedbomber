@@ -137,16 +137,34 @@ b  ai_cmds_completed
     p; b end
 
 :1_left
-    s/\.1/1MOVED./g
+    /[KFB]1.*\[FIELD_END\]/ {
+        s/\[FIRST_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /K1.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:KICKER:BF]/     }
+        /F1.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:PYROMANIAC:BF]/ }
+        /B1.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:BKEEPER:BF]/    }
+        s/[KFB]1(.*\[FIELD_END\])/1MOVED.\1/
+        b 1_left_skip        
+    }
+    s/\.1/1MOVED./
+    :1_left_skip
     /1MOVED.*first_planting/ {
-        s/1MOVED\./1@/g
-        s/\[status_first_planting\]//g
+        s/1MOVED\./1@/
+        s/\[status_first_planting\]//
     }
     s/1MOVED/1/g    
     b print
 
 :1_right
+    /1[KFB].*\[FIELD_END\]/ {
+        s/\[FIRST_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /1K.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:KICKER:BF]/     }
+        /1F.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:PYROMANIAC:BF]/ }
+        /1B.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:BKEEPER:BF]/    }
+        s/1[KFB](.*\[FIELD_END\])/.1MOVED\1/
+        b 1_right_skip
+    }
     s/1\./.1MOVED/
+    :1_right_skip
     /1MOVED.*first_planting/ {
         s/\.1MOVED/@1/
         s/\[status_first_planting\]//
@@ -155,7 +173,16 @@ b  ai_cmds_completed
     b print
 
 :1_up
+    /[KFB].{79}1.*\[FIELD_END\]/ {
+        s/\[FIRST_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /K.{79}1.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:KICKER:BF]/     }
+        /F.{79}1.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:PYROMANIAC:BF]/ }
+        /B.{79}1.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:BKEEPER:BF]/    }
+        s/[KFB](.{79})1(.*\[FIELD_END\])/1MOVED\1.\2/
+        b 1_up_skip
+    }
     s/\.(.{79})1/1MOVED\1./
+    :1_up_skip
     /1MOVED.*first_planting/ {
         s/1MOVED(.{79})\./1\1@/
         s/\[status_first_planting\]//
@@ -164,7 +191,16 @@ b  ai_cmds_completed
     b print
 
 :1_down
+    /1.{79}[KFB].*\[FIELD_END\]/ {
+        s/\[FIRST_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /1.{79}K.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:KICKER:BF]/     }
+        /1.{79}F.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:PYROMANIAC:BF]/ }
+        /1.{79}B.*\[FIELD_END\]/ { s/$/[FIRST_BONUS:BKEEPER:BF]/    }
+        s/1(.{79})[KFB](.*\[FIELD_END\])/.\11MOVED\2/
+        b 1_down_skip
+    }
     s/1(.{79})\./.\11MOVED/ 
+    :1_down_skip
     /1MOVED.*first_planting/ {
         s/\.(.{79})1MOVED/@\11/g
         s/\[status_first_planting\]//g
@@ -182,7 +218,16 @@ b  ai_cmds_completed
 
 #SECOND PLAYER
 :2_left
+    /[KFB]2.*\[FIELD_END\]/ {
+        s/\[SECOND_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /K2.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:KICKER:BF]/     }
+        /F2.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:PYROMANIAC:BF]/ }
+        /B2.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:BKEEPER:BF]/    }
+        s/[KFB]2(.*\[FIELD_END\])/2MOVED.\1/
+        b 2_left_skip
+    }
     s/\.2/2MOVED./
+    :2_left_skip
     /2MOVED.*second_planting/ {
         s/2MOVED\./2a/
         s/\[status_second_planting\]//
@@ -191,7 +236,16 @@ b  ai_cmds_completed
     b print
 
 :2_right
+    /2[KFB].*\[FIELD_END\]/ {
+        s/\[SECOND_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /2K.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:KICKER:BF]/     }
+        /2F.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:PYROMANIAC:BF]/ }
+        /2B.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:BKEEPER:BF]/    }
+        s/2[KFB](.*\[FIELD_END\])/.2MOVED\1/
+        b 2_right_skip
+    }
     s/2\./.2MOVED/
+    :2_right_skip
     /2MOVED.*second_planting/ {
         s/\.2MOVED/a2/
         s/\[status_second_planting\]//
@@ -200,7 +254,16 @@ b  ai_cmds_completed
     b print
 
 :2_up
+    /[KFB].{79}2.*\[FIELD_END\]/ {
+        s/\[SECOND_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /K.{79}2.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:KICKER:BF]/     }
+        /F.{79}2.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:PYROMANIAC:BF]/ }
+        /B.{79}2.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:BKEEPER:BF]/    }
+        s/[KFB](.{79})2(.*\[FIELD_END\])/2MOVED\1.\2/
+        b 2_up_skip
+    }
     s/\.(.{79})2/2MOVED\1./
+    :2_up_skip
     /2MOVED.*second_planting/ {
         s/2MOVED(.{79})\./2\1a/
         s/\[status_second_planting\]//
@@ -209,7 +272,16 @@ b  ai_cmds_completed
     b print
 
 :2_down
+    /2.{79}[KFB].*\[FIELD_END\]/ {
+        s/\[SECOND_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /2.{79}K.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:KICKER:BF]/     }
+        /2.{79}F.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:PYROMANIAC:BF]/ }
+        /2.{79}B.*\[FIELD_END\]/ { s/$/[SECOND_BONUS:BKEEPER:BF]/    }
+        s/2(.{79})[KFB](.*\[FIELD_END\])/.\12MOVED\2/
+        b 2_down_skip
+    }
     s/2(.{79})\./.\12MOVED/ 
+    :2_down_skip
     /2MOVED.*second_planting/ {
         s/\.(.{79})2MOVED/a\12/
         s/\[status_second_planting\]//
@@ -227,7 +299,16 @@ b  ai_cmds_completed
 
 #THIRD PLAYER
 :3_left
+    /[KFB]3.*\[FIELD_END\]/ {
+        s/\[THIRD_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /K3.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:KICKER:BF]/     }
+        /F3.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:PYROMANIAC:BF]/ }
+        /B3.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:BKEEPER:BF]/    }
+        s/[KFB]3(.*\[FIELD_END\])/3MOVED.\1/
+        b 3_left_skip
+    }
     s/\.3/3MOVED./
+    :3_left_skip
     /3MOVED.*third_planting/ {
         s/3MOVED\./30/
         s/\[status_third_planting\]//
@@ -236,7 +317,16 @@ b  ai_cmds_completed
     b print
 
 :3_right
+    /3[KFB].*\[FIELD_END\]/ {
+        s/\[THIRD_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /3K.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:KICKER:BF]/     }
+        /3F.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:PYROMANIAC:BF]/ }
+        /3B.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:BKEEPER:BF]/    }
+        s/3[KFB](.*\[FIELD_END\])/.3MOVED\1/
+        b 3_right_skip
+    }
     s/3\./.3MOVED/
+    :3_right_skip
     /3MOVED.*third_planting/ {
         s/\.3MOVED/03/
         s/\[status_third_planting\]//
@@ -245,7 +335,16 @@ b  ai_cmds_completed
     b print
 
 :3_up
+    /[KFB].{79}3.*\[FIELD_END\]/ {
+        s/\[THIRD_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /K.{79}3.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:KICKER:BF]/     }
+        /F.{79}3.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:PYROMANIAC:BF]/ }
+        /B.{79}3.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:BKEEPER:BF]/    }
+        s/[KFB](.{79})3(.*\[FIELD_END\])/3MOVED\1.\2/
+        b 3_up_skip
+    }
     s/\.(.{79})3/3MOVED\1./
+    :3_up_skip
     /3MOVED.*third_planting/ {
         s/3MOVED(.{79})\./3\10/
         s/\[status_third_planting\]//
@@ -254,7 +353,16 @@ b  ai_cmds_completed
     b print
 
 :3_down
+    /3.{79}[KFB].*\[FIELD_END\]/ {
+        s/\[THIRD_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /3.{79}K.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:KICKER:BF]/     }
+        /3.{79}F.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:PYROMANIAC:BF]/ }
+        /3.{79}B.*\[FIELD_END\]/ { s/$/[THIRD_BONUS:BKEEPER:BF]/    }
+        s/3(.{79})[KFB](.*\[FIELD_END\])/.\13MOVED\2/
+        b 3_down_skip
+    }
     s/3(.{79})\./.\13MOVED/ 
+    :3_down_skip
     /3MOVED.*third_planting/ {
         s/\.(.{79})3MOVED/0\13/
         s/\[status_third_planting\]//
@@ -272,7 +380,16 @@ b  ai_cmds_completed
 
 #FOURTH PLAYER
 :4_left
+    /[KFB]4.*\[FIELD_END\]/ {
+        s/\[FOURTH_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /K4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:KICKER:BF]/     }
+        /F4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:PYROMANIAC:BF]/ }
+        /B4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:BKEEPER:BF]/    }
+        s/[KFB]4(.*\[FIELD_END\])/4MOVED.\1/
+        b 4_left_skip
+    }
     s/\.4/4MOVED./
+    :4_left_skip
     /4MOVED.*fourth_planting/ {
         s/4MOVED\./4o/
         s/\[status_fourth_planting\]//
@@ -281,7 +398,16 @@ b  ai_cmds_completed
     b print
 
 :4_right
+    /4[KFB].*\[FIELD_END\]/ {
+        s/\[FOURTH_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /4K.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:KICKER:BF]/     }
+        /4F.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:PYROMANIAC:BF]/ }
+        /4B.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:BKEEPER:BF]/    }
+        s/4[KFB](.*\[FIELD_END\])/.4MOVED\1/
+        b 4_right_skip
+    }
     s/4\./.4MOVED/
+    :4_right_skip
     /4MOVED.*fourth_planting/ {
         s/\.4MOVED/o4/
         s/\[status_fourth_planting\]//
@@ -290,7 +416,16 @@ b  ai_cmds_completed
     b print
 
 :4_up
+    /[KFB].{79}4.*\[FIELD_END\]/ {
+        s/\[FOURTH_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /K.{79}4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:KICKER:BF]/     }
+        /F.{79}4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:PYROMANIAC:BF]/ }
+        /B.{79}4.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:BKEEPER:BF]/    }
+        s/[KFB](.{79})4(.*\[FIELD_END\])/4MOVED\1.\2/
+        b 3_up_skip
+    }
     s/\.(.{79})4/4MOVED\1./
+    :4_up_skip
     /4MOVED.*fourth_planting/ {
         s/4MOVED(.{79})\./4\1o/
         s/\[status_fourth_planting\]//
@@ -299,7 +434,16 @@ b  ai_cmds_completed
     b print
 
 :4_down
+    /4.{79}[KFB].*\[FIELD_END\]/ {
+        s/\[FOURTH_BONUS:(KICKER|PYROMANIAC|BKEEPER):BF\]//
+        /4.{79}K.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:KICKER:BF]/     }
+        /4.{79}F.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:PYROMANIAC:BF]/ }
+        /4.{79}B.*\[FIELD_END\]/ { s/$/[FOURTH_BONUS:BKEEPER:BF]/    }
+        s/4(.{79})[KFB](.*\[FIELD_END\])/.\14MOVED\2/
+        b 3_down_skip
+    }
     s/4(.{79})\./.\14MOVED/ 
+    :4_down_skip
     /4MOVED.*fourth_planting/ {
         s/\.(.{79})4MOVED/o\14/
         s/\[status_fourth_planting\]//
@@ -679,91 +823,91 @@ b  ai_cmds_completed
 #set goals for AI_FSM
   /\[ai_2_cmd_query/! {
     #taking cover
-    /[@a0o*](.{79}(\..{79}(\..{79})?)?)2.*\[FIELD_END\]/ {
+    /[@a0o*qvp](.{79}([.KFB].{79}([KFB].{79})?)?)2.*\[FIELD_END\]/ {
       #Bomb is higher
       s/\[ai_2_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_2_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_2_goal\]/
-      /\..{79}\.2/ { s/(\[ai_2_goal)\]/\1_slide_left_up\]/    }
-      /\.2.{78}\./ { s/(\[ai_2_goal)\]/\1_slide_left_down\]/  }
-      /2\..{79}\./ { s/(\[ai_2_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}2\./ { s/(\[ai_2_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}2/ { s/(\[ai_2_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}2/ { s/(\[ai_2_goal)\]/\1_slide_up_right\]/   }
-      /2.{78}\.\./ { s/(\[ai_2_goal)\]/\1_slide_down_left\]/  }
-      /2.{79}\.\./ { s/(\[ai_2_goal)\]/\1_slide_down_right\]/ }
-      /\.\.2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
-      /2\.\./      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
-      /2.{79}\./   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
+      /[.KFB].{79}\.2/ { s/(\[ai_2_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]2.{78}[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_left_down\]/  }
+      /2[.KFB].{79}[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}2[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}2/ { s/(\[ai_2_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}2/ { s/(\[ai_2_goal)\]/\1_slide_up_right\]/   }
+      /2.{78}[.KFB][.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_down_left\]/  }
+      /2.{79}[.KFB][.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
+      /2[.KFB][.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
+      /2.{79}[.KFB]/   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
       /\[ai_2_taking_cover/! {
-        s/(([@a0o])(.{79}(\..{79}(\..{79})?)?)2.*)$/\1\[ai_2_taking_cover_\2\]/
+        s/(([@a0o])(.{79}([.KFB].{79}([.KFB].{79})?)?)2.*)$/\1\[ai_2_taking_cover_\2\]/
       }
       b ai_2_goal_handler
     }
 
-    /2(.{79}(\..{79}(\..{79})?)?)[@a0o*].*\[FIELD_END\]/ {
+    /2(.{79}([.KFB].{79}([.KFB].{79})?)?)[@a0o*qvp].*\[FIELD_END\]/ {
       #Bomb is below
       s/\[ai_2_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_2_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_2_goal\]/
-      /\..{79}\.2/ { s/(\[ai_2_goal)\]/\1_slide_left_up\]/    }
-      /\.2.{78}\./ { s/(\[ai_2_goal)\]/\1_slide_left_down\]/  }
-      /2\..{79}\./ { s/(\[ai_2_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}2\./ { s/(\[ai_2_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}2/ { s/(\[ai_2_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}2/ { s/(\[ai_2_goal)\]/\1_slide_up_right\]/   }
-      /2.{78}\.\./ { s/(\[ai_2_goal)\]/\1_slide_down_left\]/  }
-      /2.{79}\.\./ { s/(\[ai_2_goal)\]/\1_slide_down_right\]/ }
-      /\.\.2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
-      /2\.\./      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
-      /\..{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
+      /[.KFB].{79}[.KFB]2/ { s/(\[ai_2_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]2.{78}[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_left_down\]/  }
+      /2[.KFB].{79}[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}2[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}2/ { s/(\[ai_2_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}2/ { s/(\[ai_2_goal)\]/\1_slide_up_right\]/   }
+      /2.{78}[.KFB][.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_down_left\]/  }
+      /2.{79}[.KFB][.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
+      /2[.KFB][.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
+      /[.KFB].{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
       /\[ai_2_taking_cover/! {
-        s/(2(.{79}(\..{79}(\..{79})?)?)([@a0o]).*)$/\1\[ai_2_taking_cover_\5\]/
+        s/(2(.{79}([.KFB].{79}([.KFB].{79})?)?)([@a0o]).*)$/\1\[ai_2_taking_cover_\5\]/
       }
       b ai_2_goal_handler
     }
     
-    /[@a0o*]\.?\.?\.?2.*\[FIELD_END\]/ {
+    /[@a0o*qvp][.KFB]?[.KFB]?[.KFB]?2.*\[FIELD_END\]/ {
       #Bomb is to the left
       s/\[ai_2_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_2_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_2_goal\]/
-      /\..{79}\.2/ { s/(\[ai_2_goal)\]/\1_slide_left_up\]/    }
-      /\.2.{78}\./ { s/(\[ai_2_goal)\]/\1_slide_left_down\]/  }
-      /2\..{79}\./ { s/(\[ai_2_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}2\./ { s/(\[ai_2_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}2/ { s/(\[ai_2_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}2/ { s/(\[ai_2_goal)\]/\1_slide_up_right\]/   }
-      /2.{78}\.\./ { s/(\[ai_2_goal)\]/\1_slide_down_left\]/  }
-      /2.{79}\.\./ { s/(\[ai_2_goal)\]/\1_slide_down_right\]/ }
-      /2\.\./      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
-      /\..{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
-      /2.{79}\./   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
+      /[.KFB].{79}[.KFB]2/ { s/(\[ai_2_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]2.{78}[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_left_down\]/  }
+      /2[.KFB].{79}[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}2[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}2/ { s/(\[ai_2_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}2/ { s/(\[ai_2_goal)\]/\1_slide_up_right\]/   }
+      /2.{78}[.KFB][.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_down_left\]/  }
+      /2.{79}[.KFB][.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_down_right\]/ }
+      /2[.KFB][.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
+      /[.KFB].{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
+      /2.{79}[.KFB]/   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
       /\[ai_2_taking_cover/! { 
-        s/(([@a0o])\.?\.?\.?2.*)$/\1\[ai_2_taking_cover_\2\]/
+        s/(([@a0o])[.KFB]?[.KFB]?[.KFB]?2.*)$/\1\[ai_2_taking_cover_\2\]/
       }
       b ai_2_goal_handler
     }
 
-    /2\.?\.?\.?[@a0o*].*\[FIELD_END\]/ {
+    /2[.KFB]?[.KFB]?[.KFB]?[@a0o*qvp].*\[FIELD_END\]/ {
       #Bomb is to the right
       s/\[ai_2_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_2_goal_line_(up|down)\]//g
       s/\[ai_2_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_2_goal\]/
-      /\..{79}\.2/ { s/(\[ai_2_goal)\]/\1_slide_left_up\]/    }
-      /\.2.{78}\./ { s/(\[ai_2_goal)\]/\1_slide_left_down\]/  }
-      /2\..{79}\./ { s/(\[ai_2_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}2\./ { s/(\[ai_2_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}2/ { s/(\[ai_2_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}2/ { s/(\[ai_2_goal)\]/\1_slide_up_right\]/   }
-      /2.{78}\.\./ { s/(\[ai_2_goal)\]/\1_slide_down_left\]/  }
-      /2.{79}\.\./ { s/(\[ai_2_goal)\]/\1_slide_down_right\]/ }
-      /\.\.2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
-      /\..{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
-      /2.{79}\./   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
+      /[.KFB].{79}[.KFB]2/ { s/(\[ai_2_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]2.{78}[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_left_down\]/  }
+      /2[.KFB].{79}[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}2[.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}2/ { s/(\[ai_2_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}2/ { s/(\[ai_2_goal)\]/\1_slide_up_right\]/   }
+      /2.{78}[.KFB][.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_down_left\]/  }
+      /2.{79}[.KFB][.KFB]/ { s/(\[ai_2_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
+      /[.KFB].{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
+      /2.{79}[.KFB]/   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
       /\[ai_2_taking_cover/! {
-        s/(2\.?\.?\.?([@a0o]).*)$/\1[ai_2_taking_cover_\2]/
+        s/(2[.KFB]?[.KFB]?[.KFB]?([@a0o]).*)$/\1[ai_2_taking_cover_\2]/
       }
       b ai_2_goal_handler
     }
@@ -861,7 +1005,7 @@ b  ai_cmds_completed
             s/\[ai_2_goal_plant_bomb\]//g
             #target is more than one line downward from second bomber
             /2(.*\n){3,}[^\n]*1.*\[FIELD_END\]/ {
-                s/$/[ai_2_goal_line_down\]/
+                s/$/[ai_2_goal_line_down]/
                 b ai_2_goal_handler
             }
             #prevent cycling
@@ -909,7 +1053,7 @@ b  ai_cmds_completed
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_2_goal_plant_bomb\]/! {
-      /[12](\.?|.{79}|.{79}\..{79})[21].*\[FIELD_END\]/ {
+      /[12]([.KFB]?|.{79}|.{79}[.KFB].{79})[21].*\[FIELD_END\]/ {
           s/\[ai_2_goal_(line|shift)_(up|down|right|left)\]//g
           s/\[ai_2_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
           s/$/[ai_2_goal_plant_bomb]/
@@ -1007,7 +1151,7 @@ b  ai_cmds_completed
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_2_goal_plant_bomb\]/! {
-      /[32](\.?|.{79}|.{79}\..{79})[23].*\[FIELD_END\]/ {
+      /[32]([.KFB]?|.{79}|.{79}[.KFB].{79})[23].*\[FIELD_END\]/ {
           s/\[ai_2_goal_(line|shift)_(up|down|right|left)\]//g
           s/$/[ai_2_goal_plant_bomb]/
       }
@@ -1104,7 +1248,7 @@ b  ai_cmds_completed
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_2_goal_plant_bomb\]/! {
-      /[24](\.?|.{79}|.{79}\..{79})[24].*\[FIELD_END\]/ {
+      /[24]([.KFB]?|.{79}|.{79}[.KFB].{79})[24].*\[FIELD_END\]/ {
           s/\[ai_2_goal_(line|shift)_(up|down|right|left)\]//g
           s/$/[ai_2_goal_plant_bomb]/
       }
@@ -1113,20 +1257,20 @@ b  ai_cmds_completed
   }
 :ai_2_goal_handler
     /\[ai_2_goal_plant_bomb\]/! {
-      /=.{79}2.*\[FIELD_END\].*\[ai_2_goal_line_up\]/ {
+      /[=kfb].{79}2.*\[FIELD_END\].*\[ai_2_goal_line_up\]/ {
           s/\[ai_2_goal_line_up\]//
           s/$/[ai_2_goal_plant_bomb]/
       } 
-      /=2.*\[FIELD_END\].*\[ai_2_goal_shift_left\]/ {
+      /[=kfb]2.*\[FIELD_END\].*\[ai_2_goal_shift_left\]/ {
           s/\[ai_2_goal_shift_left\]//
           s/$/[ai_2_goal_plant_bomb]/
       } 
-      /2.{79}=.*\[FIELD_END\].*\[ai_2_goal_line_down\]/ {
+      /2.{79}[=kfb].*\[FIELD_END\].*\[ai_2_goal_line_down\]/ {
           s/\[ai_2_goal_line_down\]//
           s/$/[ai_2_goal_plant_bomb]/
       }
-      /2=.*\[FIELD_END\].*\[ai_2_goal_shift_right\]/ {
-          s/\[ai_2_goal_shift_right\]//g
+      /2[=kfb].*\[FIELD_END\].*\[ai_2_goal_shift_right\]/ {
+          s/\[ai_2_goal_shift_right\]//
           s/$/[ai_2_goal_plant_bomb]/
       }
     }
@@ -1136,42 +1280,46 @@ b  ai_cmds_completed
             s/\[ai_2_goal_plant_bomb\]//
             s/$/\[ai_2_cmd_query_!plant\]/
             #go_away_way
-            /\..{79}\.2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!left_!up\]/     }
-            /\.2.{78}\./ { s/(\[ai_2_cmd_query_!plant)\]/\1_!left_!down\]/   }
-            /2\..{79}\./ { s/(\[ai_2_cmd_query_!plant)\]/\1_!right_!down\]/  }
-            /\..{78}2\./ { s/(\[ai_2_cmd_query_!plant)\]/\1_!right_!up\]/    }
-            /2.{78}\.\./ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down_!left\]/   }
-            /2.{79}\.\./ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down_!right\]/  }
-            /\.\..{79}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up_!left\]/     }
-            /\.\..{78}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up_!right\]/    }
-            /\.\.\.2/    { s/(\[ai_2_cmd_query_!plant)\]/\1_!left_!left\]/   }
-            /2\.\.\./    { s/(\[ai_2_cmd_query_!plant)\]/\1_!right_!right\]/ }
-            /2.{79}\..{79}\./ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down\]/    }
-            /\..{79}\..{79}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up\]/      }
+            /[.KFB].{79}[.KFB]2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!left_!up\]/     }
+            /[.KFB]2.{78}[.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!left_!down\]/   }
+            /2[.KFB].{79}[.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!right_!down\]/  }
+            /[.KFB].{78}2[.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!right_!up\]/    }
+            /2.{78}[.KFB][.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down_!left\]/   }
+            /2.{79}[.KFB][.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down_!right\]/  }
+            /[.KFB][.KFB].{79}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up_!left\]/     }
+            /[.KFB][.KFB].{78}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up_!right\]/    }
+            /[.KFB][.KFB][.KFB]2/    { s/(\[ai_2_cmd_query_!plant)\]/\1_!left_!left\]/   }
+            /2[.KFB][.KFB][.KFB]/    { s/(\[ai_2_cmd_query_!plant)\]/\1_!right_!right\]/ }
+            /2.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!down\]/    }
+            /[.KFB].{79}[.KFB].{79}2/ { s/(\[ai_2_cmd_query_!plant)\]/\1_!up\]/      }
         }
         /\[ai_2_goal_line_up\]/ {
-            /\..{79}2/    { s/$/[ai_2_cmd_query_!up]/;            b a2q; }
-            /#\..{78}2\./ { s/$/[ai_2_cmd_query_!right_!up]/;     b a2q; }
-            /\.#.{78}\.2/ { s/$/[ai_2_cmd_query_!left_!up]/;      b a2q; }
-            /\.2/         { s/$/[ai_2_cmd_query_!left\]/;         b a2q; }
-            /2\./         { s/$/[ai_2_cmd_query_!right\]/;        b a2q; }
+            /[.KFB].{79}2/    { s/$/[ai_2_cmd_query_!up]/;            b a2q; }
+            /#[.KFB].{78}2[.KFB]/ { s/$/[ai_2_cmd_query_!right_!up]/;     b a2q; }
+            /[.KFB]#.{78}[.KFB]2/ { s/$/[ai_2_cmd_query_!left_!up]/;      b a2q; }
+            /[.KFB]{2}2/         { s/$/[ai_2_cmd_query_!left_!left\]/;         b a2q; }
+            /2[.KFB]{2}/         { s/$/[ai_2_cmd_query_!right_!right\]/;        b a2q; }
+            /[.KFB]2/         { s/$/[ai_2_cmd_query_!left\]/;         b a2q; }
+            /2[.KFB]/         { s/$/[ai_2_cmd_query_!right\]/;        b a2q; }
         }
         /\[ai_2_goal_line_down\]/ {
-            /2.{79}\./    { s/$/[ai_2_cmd_query_!down]/;          b a2q; }
-            /2\..{78}#\./ { s/$/[ai_2_cmd_query_!right_!down]/;   b a2q; }
-            /\.2.{78}\.#/ { s/$/[ai_2_cmd_query_!left_!down]/;    b a2q; }
-            /\.2/         { s/$/[ai_2_cmd_query_!left\]/;         b a2q; }
-            /2\./         { s/$/[ai_2_cmd_query_!right\]/;        b a2q; }
+            /2.{79}[.KFB]/    { s/$/[ai_2_cmd_query_!down]/;          b a2q; }
+            /2[.KFB].{78}#[.KFB]/ { s/$/[ai_2_cmd_query_!right_!down]/;   b a2q; }
+            /[.KFB]2.{78}[.KFB]#/ { s/$/[ai_2_cmd_query_!left_!down]/;    b a2q; }
+            /[.KFB]{2}2/         { s/$/[ai_2_cmd_query_!left_!left\]/;         b a2q; }
+            /2[.KFB]{2}/         { s/$/[ai_2_cmd_query_!right_!right\]/;        b a2q; }
+            /[.KFB]2/         { s/$/[ai_2_cmd_query_!left\]/;         b a2q; }
+            /2[.KFB]/         { s/$/[ai_2_cmd_query_!right\]/;        b a2q; }
         }
         /\[ai_2_goal_shift_right\]/ {
-            /2\./         { s/$/[ai_2_cmd_query_!right]/;         b a2q; }
-            /\.\..{78}2#/ { s/$/[ai_2_cmd_query_!up_!right]/;     b a2q; }
-            /2#.{78}\.\./ { s/$/[ai_2_cmd_query_!down_!right]/;   b a2q; }
+            /2[.KFB]/         { s/$/[ai_2_cmd_query_!right]/;         b a2q; }
+            /[.KFB][.KFB].{78}2#/ { s/$/[ai_2_cmd_query_!up_!right]/;     b a2q; }
+            /2#.{78}[.KFB][.KFB]/ { s/$/[ai_2_cmd_query_!down_!right]/;   b a2q; }
         }
         /\[ai_2_goal_shift_left\]/ {
-            /\.2/           { s/$/[ai_2_cmd_query_!left]/;        b a2q; }
-            /\.\.(.{78})#2/ { s/$/[ai_2_cmd_query_!up_!left]/;    b a2q; }
-            /#2(.{78})\.\./ { s/$/[ai_2_cmd_query_!down_!left]/;  b a2q; }
+            /[.KFB]2/           { s/$/[ai_2_cmd_query_!left]/;        b a2q; }
+            /[.KFB][.KFB](.{78})#2/ { s/$/[ai_2_cmd_query_!up_!left]/;    b a2q; }
+            /#2(.{78})[.KFB][.KFB]/ { s/$/[ai_2_cmd_query_!down_!left]/;  b a2q; }
         }
         s/(\[ai_2_goal_slide_(up|down)_(left|right)\].*)$/\1[ai_2_cmd_query_!\2_!\3]/
         s/(\[ai_2_goal_slide_(left|right)_(up|down)\].*)$/\1[ai_2_cmd_query_!\2_!\3]/
@@ -1211,93 +1359,93 @@ b ai_2_finish
 #set goals for AI_FSM
   /\[ai_3_cmd_query/! {
     #taking cover
-    /[@a0o*](.{79}(\..{79}(\..{79})?)?)3.*\[FIELD_END\]/ {
+    /[@a0o*qvp](.{79}([.KFB].{79}([.KFB].{79})?)?)3.*\[FIELD_END\]/ {
       #Bomb is higher
       s/\[ai_3_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_3_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_3_goal\]/
-      /\..{79}\.3/ { s/(\[ai_3_goal)\]/\1_slide_left_up\]/    }
-      /\.3.{78}\./ { s/(\[ai_3_goal)\]/\1_slide_left_down\]/  }
-      /3\..{79}\./ { s/(\[ai_3_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}3\./ { s/(\[ai_3_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}3/ { s/(\[ai_3_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}3/ { s/(\[ai_3_goal)\]/\1_slide_up_right\]/   }
-      /3.{78}\.\./ { s/(\[ai_3_goal)\]/\1_slide_down_left\]/  }
-      /3.{79}\.\./ { s/(\[ai_3_goal)\]/\1_slide_down_right\]/ }
-      /\.\.3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
-      /3\.\./      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
-      /3.{79}\./   { s/(\[ai_3_goal)\]/\1_line_down\]/        }
-      /\.3/        { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
-      /3\./        { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
+      /[.KFB].{79}[.KFB]3/ { s/(\[ai_3_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]3.{78}[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_left_down\]/  }
+      /3[.KFB].{79}[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}3[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}3/ { s/(\[ai_3_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}3/ { s/(\[ai_3_goal)\]/\1_slide_up_right\]/   }
+      /3.{78}[.KFB][.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_down_left\]/  }
+      /3.{79}[.KFB][.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
+      /3[.KFB][.KFB]/      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
+      /3.{79}[.KFB]/   { s/(\[ai_3_goal)\]/\1_line_down\]/        }
+      /[.KFB]3/        { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
+      /3[.KFB]/        { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
       /\[ai_3_taking_cover/! {
-        s/(([@a0o])(.{79}(\..{79}(\..{79})?)?)3.*)$/\1\[ai_3_taking_cover_\2\]/
+        s/(([@a0o])(.{79}([.KFB].{79}([.KFB].{79})?)?)3.*)$/\1\[ai_3_taking_cover_\2\]/
       }
       b ai_3_goal_handler
     }
 
-    /3(.{79}(\..{79}(\..{79})?)?)[@a0o*].*\[FIELD_END\]/ {
+    /3(.{79}([.KFB].{79}([.KFB].{79})?)?)[@a0o*qvp].*\[FIELD_END\]/ {
       #Bomb is below
       s/\[ai_3_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_3_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_3_goal\]/
-      /\..{79}\.3/ { s/(\[ai_3_goal)\]/\1_slide_left_up\]/    }
-      /\.3.{78}\./ { s/(\[ai_3_goal)\]/\1_slide_left_down\]/  }
-      /3\..{79}\./ { s/(\[ai_3_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}3\./ { s/(\[ai_3_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}3/ { s/(\[ai_3_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}3/ { s/(\[ai_3_goal)\]/\1_slide_up_right\]/   }
-      /3.{78}\.\./ { s/(\[ai_3_goal)\]/\1_slide_down_left\]/  }
-      /3.{79}\.\./ { s/(\[ai_3_goal)\]/\1_slide_down_right\]/ }
-      /\.\.3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
-      /3\.\./      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
-      /\..{79}3/   { s/(\[ai_3_goal)\]/\1_line_up\]/          }
+      /[.KFB].{79}[.KFB]3/ { s/(\[ai_3_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]3.{78}[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_left_down\]/  }
+      /3[.KFB].{79}[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}3[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}3/ { s/(\[ai_3_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}3/ { s/(\[ai_3_goal)\]/\1_slide_up_right\]/   }
+      /3.{78}[.KFB][.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_down_left\]/  }
+      /3.{79}[.KFB][.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
+      /3[.KFB][.KFB]/      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
+      /[.KFB].{79}3/   { s/(\[ai_3_goal)\]/\1_line_up\]/          }
       /\[ai_3_taking_cover/! {
-        s/(3(.{79}(\..{79}(\..{79})?)?)([@a0o]).*)$/\1\[ai_3_taking_cover_\5\]/
+        s/(3(.{79}([.KFB].{79}([.KFB].{79})?)?)([@a0o]).*)$/\1\[ai_3_taking_cover_\5\]/
       }
       b ai_3_goal_handler
     }
     
-    /[@a0o*]\.?\.?\.?3.*\[FIELD_END\]/ {
+    /[@a0o*qvp][.KFB]?[.KFB]?[.KFB]?3.*\[FIELD_END\]/ {
       #Bomb is to the left
       s/\[ai_3_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_3_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_3_goal\]/
-      /\..{79}\.3/ { s/(\[ai_3_goal)\]/\1_slide_left_up\]/    }
-      /\.3.{78}\./ { s/(\[ai_3_goal)\]/\1_slide_left_down\]/  }
-      /3\..{79}\./ { s/(\[ai_3_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}3\./ { s/(\[ai_3_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}3/ { s/(\[ai_3_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}3/ { s/(\[ai_3_goal)\]/\1_slide_up_right\]/   }
-      /3.{78}\.\./ { s/(\[ai_3_goal)\]/\1_slide_down_left\]/  }
-      /3.{79}\.\./ { s/(\[ai_3_goal)\]/\1_slide_down_right\]/ }
-      /3\.\./      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
-      /\..{79}3/   { s/(\[ai_3_goal)\]/\1_line_up\]/          }
-      /3.{79}\./   { s/(\[ai_3_goal)\]/\1_line_down\]/        }
+      /[.KFB].{79}[.KFB]3/ { s/(\[ai_3_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]3.{78}[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_left_down\]/  }
+      /3[.KFB].{79}[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}3[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}3/ { s/(\[ai_3_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}3/ { s/(\[ai_3_goal)\]/\1_slide_up_right\]/   }
+      /3.{78}[.KFB][.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_down_left\]/  }
+      /3.{79}[.KFB][.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_down_right\]/ }
+      /3[.KFB][.KFB]/      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
+      /[.KFB].{79}3/   { s/(\[ai_3_goal)\]/\1_line_up\]/          }
+      /3.{79}[.KFB]/   { s/(\[ai_3_goal)\]/\1_line_down\]/        }
       /\[ai_3_taking_cover/! { 
-        s/(([@a0o])\.?\.?\.?3.*)$/\1\[ai_3_taking_cover_\2\]/
+        s/(([@a0o])[.KFB]?[.KFB]?[.KFB]?3.*)$/\1\[ai_3_taking_cover_\2\]/
       }
       b ai_3_goal_handler
     }
 
-    /3\.?\.?\.?[@a0o*].*\[FIELD_END\]/ {
+    /3[.KFB]?[.KFB]?[.KFB]?[@a0o*qvp].*\[FIELD_END\]/ {
       #Bomb is to the right
       s/\[ai_3_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_3_goal_line_(up|down)\]//g
       s/\[ai_3_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_3_goal\]/
-      /\..{79}\.3/ { s/(\[ai_3_goal)\]/\1_slide_left_up\]/    }
-      /\.3.{78}\./ { s/(\[ai_3_goal)\]/\1_slide_left_down\]/  }
-      /3\..{79}\./ { s/(\[ai_3_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}3\./ { s/(\[ai_3_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}3/ { s/(\[ai_3_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}3/ { s/(\[ai_3_goal)\]/\1_slide_up_right\]/   }
-      /3.{78}\.\./ { s/(\[ai_3_goal)\]/\1_slide_down_left\]/  }
-      /3.{79}\.\./ { s/(\[ai_3_goal)\]/\1_slide_down_right\]/ }
-      /\.\.3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
-      /\..{79}3/   { s/(\[ai_3_goal)\]/\1_line_up\]/          }
-      /3.{79}\./   { s/(\[ai_3_goal)\]/\1_line_down\]/        }
+      /[.KFB].{79}[.KFB]3/ { s/(\[ai_3_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]3.{78}[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_left_down\]/  }
+      /3[.KFB].{79}[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}3[.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}3/ { s/(\[ai_3_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}3/ { s/(\[ai_3_goal)\]/\1_slide_up_right\]/   }
+      /3.{78}[.KFB][.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_down_left\]/  }
+      /3.{79}[.KFB][.KFB]/ { s/(\[ai_3_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
+      /[.KFB].{79}3/   { s/(\[ai_3_goal)\]/\1_line_up\]/          }
+      /3.{79}[.KFB]/   { s/(\[ai_3_goal)\]/\1_line_down\]/        }
       /\[ai_3_taking_cover/! {
-        s/(3\.?\.?\.?([@a0o]).*)$/\1[ai_3_taking_cover_\2]/
+        s/(3[.KFB]?[.KFB]?[.KFB]?([@a0o]).*)$/\1[ai_3_taking_cover_\2]/
       }
       b ai_3_goal_handler
     }
@@ -1443,7 +1591,7 @@ b ai_2_finish
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_3_goal_plant_bomb\]/! {
-      /[13](\.?|.{79}|.{79}\..{79})[31].*\[FIELD_END\]/ {
+      /[13]([.KFB]?|.{79}|.{79}[.KFB].{79})[31].*\[FIELD_END\]/ {
           s/\[ai_3_goal_(line|shift)_(up|down|right|left)\]//g
           s/\[ai_3_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
           s/$/[ai_3_goal_plant_bomb]/
@@ -1541,7 +1689,7 @@ b ai_2_finish
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_3_goal_plant_bomb\]/! {
-      /[32](\.?|.{79}|.{79}\..{79})[32].*\[FIELD_END\]/ {
+      /[32]([.KFB]?|.{79}|.{79}[.KFB].{79})[32].*\[FIELD_END\]/ {
           s/\[ai_3_goal_(line|shift)_(up|down|right|left)\]//g
           s/\[ai_3_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
           s/$/[ai_3_goal_plant_bomb]/
@@ -1639,7 +1787,7 @@ b ai_2_finish
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_3_goal_plant_bomb\]/! {
-      /[43](\.?|.{79}|.{79}\..{79})[34].*\[FIELD_END\]/ {
+      /[43]([.KFB]?|.{79}|.{79}[.KFB].{79})[34].*\[FIELD_END\]/ {
           s/\[ai_3_goal_(line|shift)_(up|down|right|left)\]//g
           s/\[ai_3_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
           s/$/[ai_3_goal_plant_bomb]/
@@ -1649,19 +1797,19 @@ b ai_2_finish
   }
 :ai_3_goal_handler
    /\[ai_3_goal_plant_bomb\]/! {
-     /=.{79}3.*\[FIELD_END\].*\[ai_3_goal_line_up\]/ {
+     /[=qvp].{79}3.*\[FIELD_END\].*\[ai_3_goal_line_up\]/ {
          s/\[ai_3_goal_line_up\]//
          s/$/[ai_3_goal_plant_bomb]/
      } 
-     /=3.*\[FIELD_END\].*\[ai_3_goal_shift_left\]/ {
+     /[=qvp]3.*\[FIELD_END\].*\[ai_3_goal_shift_left\]/ {
          s/\[ai_3_goal_shift_left\]//
          s/$/[ai_3_goal_plant_bomb]/
      } 
-     /3.{79}=.*\[FIELD_END\].*\[ai_3_goal_line_down\]/ {
+     /3.{79}[=qvp].*\[FIELD_END\].*\[ai_3_goal_line_down\]/ {
          s/\[ai_3_goal_line_down\]//
          s/$/[ai_3_goal_plant_bomb]/
      }
-     /3=.*\[FIELD_END\].*\[ai_3_goal_shift_right\]/ {
+     /3[=qvp].*\[FIELD_END\].*\[ai_3_goal_shift_right\]/ {
          s/\[ai_3_goal_shift_right\]//g
          s/$/[ai_3_goal_plant_bomb]/
      }
@@ -1672,42 +1820,46 @@ b ai_2_finish
             s/\[ai_3_goal_plant_bomb\]//
             s/$/\[ai_3_cmd_query_!plant\]/
             #go_away_way
-            /\..{79}\.3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!left_!up\]/     }
-            /\.3.{78}\./ { s/(\[ai_3_cmd_query_!plant)\]/\1_!left_!down\]/   }
-            /3\..{79}\./ { s/(\[ai_3_cmd_query_!plant)\]/\1_!right_!down\]/  }
-            /\..{78}3\./ { s/(\[ai_3_cmd_query_!plant)\]/\1_!right_!up\]/    }
-            /3.{78}\.\./ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down_!left\]/   }
-            /3.{79}\.\./ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down_!right\]/  }
-            /\.\..{79}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up_!left\]/     }
-            /\.\..{78}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up_!right\]/    }
-            /\.\.\.3/    { s/(\[ai_3_cmd_query_!plant)\]/\1_!left_!left\]/   }
-            /3\.\.\./    { s/(\[ai_3_cmd_query_!plant)\]/\1_!right_!right\]/ }
-            /3.{79}\..{79}\./ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down\]/    }
-            /\..{79}\..{79}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up\]/      }
+            /[.KFB].{79}[.KFB]3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!left_!up\]/     }
+            /[.KFB]3.{78}[.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!left_!down\]/   }
+            /3[.KFB].{79}[.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!right_!down\]/  }
+            /[.KFB].{78}3[.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!right_!up\]/    }
+            /3.{78}[.KFB][.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down_!left\]/   }
+            /3.{79}[.KFB][.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down_!right\]/  }
+            /[.KFB][.KFB].{79}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up_!left\]/     }
+            /[.KFB][.KFB].{78}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up_!right\]/    }
+            /[.KFB][.KFB][.KFB]3/    { s/(\[ai_3_cmd_query_!plant)\]/\1_!left_!left\]/   }
+            /3[.KFB][.KFB][.KFB]/    { s/(\[ai_3_cmd_query_!plant)\]/\1_!right_!right\]/ }
+            /3.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!down\]/    }
+            /[.KFB].{79}[.KFB].{79}3/ { s/(\[ai_3_cmd_query_!plant)\]/\1_!up\]/      }
         }
         /\[ai_3_goal_line_up\]/ {            
-            /\..{79}3/    { s/$/[ai_3_cmd_query_!up]/;            b a3q; }
-            /#\..{78}3\./ { s/$/[ai_3_cmd_query_!right_!up]/;     b a3q; }
-            /\.#.{78}\.3/ { s/$/[ai_3_cmd_query_!left_!up]/;      b a3q; }
-            /\.3/         { s/$/[ai_3_cmd_query_!left\]/;         b a3q; }
-            /3\./         { s/$/[ai_3_cmd_query_!right\]/;        b a3q; }
+            /[.KFB].{79}3/    { s/$/[ai_3_cmd_query_!up]/;            b a3q; }
+            /#[.KFB].{78}3[.KFB]/ { s/$/[ai_3_cmd_query_!right_!up]/;     b a3q; }
+            /[.KFB]#.{78}[.KFB]3/ { s/$/[ai_3_cmd_query_!left_!up]/;      b a3q; }
+            /[.KFB]{2}3/      { s/$/[ai_3_cmd_query_!left_!left\]/;         b a3q; }
+            /3[.KFB]{2}/      { s/$/[ai_3_cmd_query_!right_!right\]/;        b a3q; }
+            /[.KFB]3/         { s/$/[ai_3_cmd_query_!left\]/;         b a3q; }
+            /3[.KFB]/         { s/$/[ai_3_cmd_query_!right\]/;        b a3q; }
         }
         /\[ai_3_goal_line_down\]/ {
-            /3.{79}\./    { s/$/[ai_3_cmd_query_!down]/;          b a3q; }
-            /3\..{78}#\./ { s/$/[ai_3_cmd_query_!right_!down]/;   b a3q; }
-            /\.3.{78}\.#/ { s/$/[ai_3_cmd_query_!left_!down]/;    b a3q; }
-            /\.3/         { s/$/[ai_3_cmd_query_!left\]/;         b a3q; }
-            /3\./         { s/$/[ai_3_cmd_query_!right\]/;        b a3q; }
+            /3.{79}[.KFB]/    { s/$/[ai_3_cmd_query_!down]/;          b a3q; }
+            /3[.KFB].{78}#[.KFB]/ { s/$/[ai_3_cmd_query_!right_!down]/;   b a3q; }
+            /[.KFB]3.{78}[.KFB]#/ { s/$/[ai_3_cmd_query_!left_!down]/;    b a3q; }
+            /[.KFB]{2}3/      { s/$/[ai_3_cmd_query_!left_!left\]/;         b a3q; }
+            /3[.KFB]{2}/      { s/$/[ai_3_cmd_query_!right_!right\]/;        b a3q; }
+            /[.KFB]3/         { s/$/[ai_3_cmd_query_!left\]/;         b a3q; }
+            /3[.KFB]/         { s/$/[ai_3_cmd_query_!right\]/;        b a3q; }
         }
         /\[ai_3_goal_shift_right\]/ {
-            /3\./         { s/$/[ai_3_cmd_query_!right]/;         b a3q; }
-            /\.\..{78}3#/ { s/$/[ai_3_cmd_query_!up_!right]/;     b a3q; }
-            /3#.{78}\.\./ { s/$/[ai_3_cmd_query_!down_!right]/;   b a3q; }
+            /3[.KFB]/         { s/$/[ai_3_cmd_query_!right]/;         b a3q; }
+            /[.KFB][.KFB].{78}3#/ { s/$/[ai_3_cmd_query_!up_!right]/;     b a3q; }
+            /3#.{78}[.KFB][.KFB]/ { s/$/[ai_3_cmd_query_!down_!right]/;   b a3q; }
         }
         /\[ai_3_goal_shift_left\]/ {
-            /\.3/           { s/$/[ai_3_cmd_query_!left]/;        b a3q; }
-            /\.\..{78}#3/ { s/$/[ai_3_cmd_query_!up_!left]/;      b a3q; }
-            /#3.{78}\.\./ { s/$/[ai_3_cmd_query_!down_!left]/;    b a3q; }
+            /[.KFB]3/           { s/$/[ai_3_cmd_query_!left]/;        b a3q; }
+            /[.KFB][.KFB].{78}#3/ { s/$/[ai_3_cmd_query_!up_!left]/;      b a3q; }
+            /#3.{78}[.KFB][.KFB]/ { s/$/[ai_3_cmd_query_!down_!left]/;    b a3q; }
         }
         s/(\[ai_3_goal_slide_(up|down)_(left|right)\].*)$/\1[ai_3_cmd_query_!\2_!\3]/
         s/(\[ai_3_goal_slide_(left|right)_(up|down)\].*)$/\1[ai_3_cmd_query_!\2_!\3]/
@@ -1747,93 +1899,93 @@ b ai_3_finish
 #set goals for AI_FSM
   /\[ai_4_cmd_query/! {
     #taking cover
-    /[@a0o*](.{79}(\..{79}(\..{79})?)?)4.*\[FIELD_END\]/ {
+    /[@a0o*qvp](.{79}([.KFB].{79}([.KFB].{79})?)?)4.*\[FIELD_END\]/ {
       #Bomb is higher
       s/\[ai_4_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_4_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_4_goal\]/
-      /\..{79}\.4/ { s/(\[ai_4_goal)\]/\1_slide_left_up\]/    }
-      /\.4.{78}\./ { s/(\[ai_4_goal)\]/\1_slide_left_down\]/  }
-      /4\..{79}\./ { s/(\[ai_4_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}4\./ { s/(\[ai_4_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}4/ { s/(\[ai_4_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}4/ { s/(\[ai_4_goal)\]/\1_slide_up_right\]/   }
-      /4.{78}\.\./ { s/(\[ai_4_goal)\]/\1_slide_down_left\]/  }
-      /4.{79}\.\./ { s/(\[ai_4_goal)\]/\1_slide_down_right\]/ }
-      /\.\.4/      { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
-      /4\.\./      { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
-      /4.{79}\./   { s/(\[ai_4_goal)\]/\1_line_down\]/        }
-      /\.4/        { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
-      /4\./        { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
+      /[.KFB].{79}[.KFB]4/ { s/(\[ai_4_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]4.{78}[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_left_down\]/  }
+      /4[.KFB].{79}[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}4[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}4/ { s/(\[ai_4_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}4/ { s/(\[ai_4_goal)\]/\1_slide_up_right\]/   }
+      /4.{78}[.KFB][.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_down_left\]/  }
+      /4.{79}[.KFB][.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]4/      { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
+      /4[.KFB][.KFB]/      { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
+      /4.{79}[.KFB]/   { s/(\[ai_4_goal)\]/\1_line_down\]/        }
+      /[.KFB]4/        { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
+      /4[.KFB]/        { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
       /\[ai_4_taking_cover/! {
-        s/(([@a0o])(.{79}(\..{79}(\..{79})?)?)4.*)$/\1\[ai_4_taking_cover_\2\]/
+        s/(([@a0o])(.{79}([.KFB].{79}([.KFB].{79})?)?)4.*)$/\1\[ai_4_taking_cover_\2\]/
       }
       b ai_4_goal_handler
     }
 
-    /4(.{79}(\..{79}(\..{79})?)?)[@a0o*].*\[FIELD_END\]/ {
+    /4(.{79}([.KFB].{79}([.KFB].{79})?)?)[@a0o*qvp].*\[FIELD_END\]/ {
       #Bomb is below
       s/\[ai_4_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_4_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_4_goal\]/
-      /\..{79}\.4/ { s/(\[ai_4_goal)\]/\1_slide_left_up\]/    }
-      /\.4.{78}\./ { s/(\[ai_4_goal)\]/\1_slide_left_down\]/  }
-      /4\..{79}\./ { s/(\[ai_4_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}4\./ { s/(\[ai_4_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}4/ { s/(\[ai_4_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}4/ { s/(\[ai_4_goal)\]/\1_slide_up_right\]/   }
-      /4.{78}\.\./ { s/(\[ai_4_goal)\]/\1_slide_down_left\]/  }
-      /4.{79}\.\./ { s/(\[ai_4_goal)\]/\1_slide_down_right\]/ }
-      /\.\.4/      { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
-      /4\.\./      { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
-      /\..{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
+      /[.KFB].{79}[.KFB]4/ { s/(\[ai_4_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]4.{78}[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_left_down\]/  }
+      /4[.KFB].{79}[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}4[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}4/ { s/(\[ai_4_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}4/ { s/(\[ai_4_goal)\]/\1_slide_up_right\]/   }
+      /4.{78}[.KFB][.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_down_left\]/  }
+      /4.{79}[.KFB][.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]4/      { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
+      /4[.KFB][.KFB]/      { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
+      /[.KFB].{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
       /\[ai_4_taking_cover/! {
-        s/(4(.{79}(\..{79}(\..{79})?)?)([@a0o]).*)$/\1\[ai_4_taking_cover_\5\]/
+        s/(4(.{79}([.KFB].{79}([.KFB].{79})?)?)([@a0o]).*)$/\1\[ai_4_taking_cover_\5\]/
       }
       b ai_4_goal_handler
     }
     
-    /[@a0o*]\.?\.?\.?4.*\[FIELD_END\]/ {
+    /[@a0o*qvp][.KFB]?[.KFB]?[.KFB]?4.*\[FIELD_END\]/ {
       #Bomb is to the left
       s/\[ai_4_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_4_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_4_goal\]/
-      /\..{79}\.4/ { s/(\[ai_4_goal)\]/\1_slide_left_up\]/    }
-      /\.4.{78}\./ { s/(\[ai_4_goal)\]/\1_slide_left_down\]/  }
-      /4\..{79}\./ { s/(\[ai_4_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}4\./ { s/(\[ai_4_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}4/ { s/(\[ai_4_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}4/ { s/(\[ai_4_goal)\]/\1_slide_up_right\]/   }
-      /4.{78}\.\./ { s/(\[ai_4_goal)\]/\1_slide_down_left\]/  }
-      /4.{79}\.\./ { s/(\[ai_4_goal)\]/\1_slide_down_right\]/ }
-      /4\.\./      { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
-      /\..{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
-      /4.{79}\./   { s/(\[ai_4_goal)\]/\1_line_down\]/        }
+      /[.KFB].{79}[.KFB]4/ { s/(\[ai_4_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]4.{78}[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_left_down\]/  }
+      /4[.KFB].{79}[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}4[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}4/ { s/(\[ai_4_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}4/ { s/(\[ai_4_goal)\]/\1_slide_up_right\]/   }
+      /4.{78}[.KFB][.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_down_left\]/  }
+      /4.{79}[.KFB][.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_down_right\]/ }
+      /4[.KFB][.KFB]/      { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
+      /[.KFB].{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
+      /4.{79}[.KFB]/   { s/(\[ai_4_goal)\]/\1_line_down\]/        }
       /\[ai_4_taking_cover/! { 
-        s/(([@a0o])\.?\.?\.?4.*)$/\1\[ai_4_taking_cover_\2\]/
+        s/(([@a0o])[.KFB]?[.KFB]?[.KFB]?4.*)$/\1\[ai_4_taking_cover_\2\]/
       }
       b ai_4_goal_handler
     }
 
-    /4\.?\.?\.?[@a0o*].*\[FIELD_END\]/ {
+    /4[.KFB]?[.KFB]?[.KFB]?[@a0o*qvp].*\[FIELD_END\]/ {
       #Bomb is to the right
       s/\[ai_4_goal_(line|shift)_(up|down|left|right)\]//g
       s/\[ai_4_goal_line_(up|down)\]//g
       s/\[ai_4_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
       s/$/\[ai_4_goal\]/
-      /\..{79}\.4/ { s/(\[ai_4_goal)\]/\1_slide_left_up\]/    }
-      /\.4.{78}\./ { s/(\[ai_4_goal)\]/\1_slide_left_down\]/  }
-      /4\..{79}\./ { s/(\[ai_4_goal)\]/\1_slide_right_down\]/ }
-      /\..{78}4\./ { s/(\[ai_4_goal)\]/\1_slide_right_up\]/   }
-      /\.\..{79}4/ { s/(\[ai_4_goal)\]/\1_slide_up_left\]/    }
-      /\.\..{78}4/ { s/(\[ai_4_goal)\]/\1_slide_up_right\]/   }
-      /4.{78}\.\./ { s/(\[ai_4_goal)\]/\1_slide_down_left\]/  }
-      /4.{79}\.\./ { s/(\[ai_4_goal)\]/\1_slide_down_right\]/ }
-      /\.\.4/      { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
-      /\..{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
-      /4.{79}\./   { s/(\[ai_4_goal)\]/\1_line_down\]/        }
+      /[.KFB].{79}[.KFB]4/ { s/(\[ai_4_goal)\]/\1_slide_left_up\]/    }
+      /[.KFB]4.{78}[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_left_down\]/  }
+      /4[.KFB].{79}[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_right_down\]/ }
+      /[.KFB].{78}4[.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_right_up\]/   }
+      /[.KFB][.KFB].{79}4/ { s/(\[ai_4_goal)\]/\1_slide_up_left\]/    }
+      /[.KFB][.KFB].{78}4/ { s/(\[ai_4_goal)\]/\1_slide_up_right\]/   }
+      /4.{78}[.KFB][.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_down_left\]/  }
+      /4.{79}[.KFB][.KFB]/ { s/(\[ai_4_goal)\]/\1_slide_down_right\]/ }
+      /[.KFB][.KFB]4/      { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
+      /[.KFB].{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
+      /4.{79}[.KFB]/   { s/(\[ai_4_goal)\]/\1_line_down\]/        }
       /\[ai_4_taking_cover/! {
-        s/(4\.?\.?\.?([@a0o]).*)$/\1[ai_4_taking_cover_\2]/
+        s/(4[.KFB]?[.KFB]?[.KFB]?([@a0o]).*)$/\1[ai_4_taking_cover_\2]/
       }
       b ai_4_goal_handler
     }
@@ -1973,7 +2125,7 @@ b ai_3_finish
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_4_goal_plant_bomb\]/! {
-      /[14](\.?|.{79}|.{79}\..{79})[41].*\[FIELD_END\]/ {
+      /[14]([.KFB]?|.{79}|.{79}[.KFB].{79})[41].*\[FIELD_END\]/ {
           s/\[ai_4_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
           s/$/[ai_4_goal_plant_bomb]/
       }
@@ -2076,7 +2228,7 @@ b ai_3_finish
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_4_goal_plant_bomb\]/! {
-      /[32](\.?|.{79}|.{79}\..{79})[23].*\[FIELD_END\]/ {
+      /[32]([.KFB]?|.{79}|.{79}[.KFB].{79})[23].*\[FIELD_END\]/ {
           s/\[ai_4_goal_(line|shift)_(up|down|right|left)\]//g
           s/$/[ai_4_goal_plant_bomb]/
       }
@@ -2173,7 +2325,7 @@ b ai_3_finish
     }
 #SEEK_GOAL_COMPLETE; Time to blow it
     /\[ai_4_goal_plant_bomb\]/! {
-      /[24](\.?|.{79}|.{79}\..{79})[24].*\[FIELD_END\]/ {
+      /[24]([.KFB]?|.{79}|.{79}[.KFB].{79})[24].*\[FIELD_END\]/ {
           s/\[ai_4_goal_(line|shift)_(up|down|right|left)\]//g
           s/\[ai_4_goal_slide_(up|down|left|right)_(up|down|left|right)\]//g
           s/$/[ai_4_goal_plant_bomb]/
@@ -2183,19 +2335,19 @@ b ai_3_finish
   }
 :ai_4_goal_handler
     /\[ai_4_goal_plant_bomb\]/! {
-      /=.{79}4.*\[FIELD_END\].*\[ai_4_goal_line_up\]/ {
+      /[=kfb].{79}4.*\[FIELD_END\].*\[ai_4_goal_line_up\]/ {
           s/\[ai_4_goal_line_up\]//
           s/$/[ai_4_goal_plant_bomb]/
       } 
-      /=4.*\[FIELD_END\].*\[ai_4_goal_shift_left\]/ {
+      /[=kfb]4.*\[FIELD_END\].*\[ai_4_goal_shift_left\]/ {
           s/\[ai_4_goal_shift_left\]//
           s/$/[ai_4_goal_plant_bomb]/
       } 
-      /4.{79}=.*\[FIELD_END\].*\[ai_4_goal_line_down\]/ {
+      /4.{79}[=kfb].*\[FIELD_END\].*\[ai_4_goal_line_down\]/ {
           s/\[ai_4_goal_line_down\]//
           s/$/[ai_4_goal_plant_bomb]/
       }
-      /4=.*\[FIELD_END\].*\[ai_4_goal_shift_right\]/ {
+      /4[=kfb].*\[FIELD_END\].*\[ai_4_goal_shift_right\]/ {
           s/\[ai_4_goal_shift_right\]//g
           s/$/[ai_4_goal_plant_bomb]/
       }
@@ -2206,42 +2358,46 @@ b ai_3_finish
             s/\[ai_4_goal_plant_bomb\]//
             s/$/\[ai_4_cmd_query_!plant\]/
             #go_away_way
-            /\..{79}\.4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!left_!up\]/     }
-            /\.4.{78}\./ { s/(\[ai_4_cmd_query_!plant)\]/\1_!left_!down\]/   }
-            /4\..{79}\./ { s/(\[ai_4_cmd_query_!plant)\]/\1_!right_!down\]/  }
-            /\..{78}4\./ { s/(\[ai_4_cmd_query_!plant)\]/\1_!right_!up\]/    }
-            /4.{78}\.\./ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down_!left\]/   }
-            /4.{79}\.\./ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down_!right\]/  }
-            /\.\..{79}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up_!left\]/     }
-            /\.\..{78}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up_!right\]/    }
-            /\.\.\.4/    { s/(\[ai_4_cmd_query_!plant)\]/\1_!left_!left\]/   }
-            /4\.\.\./    { s/(\[ai_4_cmd_query_!plant)\]/\1_!right_!right\]/ }
-            /4.{79}\..{79}\./ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down\]/    }
-            /\..{79}\..{79}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up\]/      }
+            /[.KFB].{79}[.KFB]4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!left_!up\]/     }
+            /[.KFB]4.{78}[.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!left_!down\]/   }
+            /4[.KFB].{79}[.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!right_!down\]/  }
+            /[.KFB].{78}4[.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!right_!up\]/    }
+            /4.{78}[.KFB][.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down_!left\]/   }
+            /4.{79}[.KFB][.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down_!right\]/  }
+            /[.KFB][.KFB].{79}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up_!left\]/     }
+            /[.KFB][.KFB].{78}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up_!right\]/    }
+            /[.KFB][.KFB][.KFB]4/    { s/(\[ai_4_cmd_query_!plant)\]/\1_!left_!left\]/   }
+            /4[.KFB][.KFB][.KFB]/    { s/(\[ai_4_cmd_query_!plant)\]/\1_!right_!right\]/ }
+            /4.{79}[.KFB].{79}[.KFB]/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!down\]/    }
+            /[.KFB].{79}[.KFB].{79}4/ { s/(\[ai_4_cmd_query_!plant)\]/\1_!up\]/      }
         }
         /\[ai_4_goal_line_up\]/ {            
-            /\..{79}4/    { s/$/[ai_4_cmd_query_!up]/;            b a4q; }
-            /#\..{78}4\./ { s/$/[ai_4_cmd_query_!right_!up]/;     b a4q; }
-            /\.#.{78}\.4/ { s/$/[ai_4_cmd_query_!left_!up]/;      b a4q; }
-            /\.4/         { s/$/[ai_4_cmd_query_!left]/;          b a4q; }
-            /4\./         { s/$/[ai_4_cmd_query_!right]/;         b a4q; }
+            /[.KFB].{79}4/    { s/$/[ai_4_cmd_query_!up]/;            b a4q; }
+            /#[.KFB].{78}4[.KFB]/ { s/$/[ai_4_cmd_query_!right_!up]/;     b a4q; }
+            /[.KFB]#.{78}[.KFB]4/ { s/$/[ai_4_cmd_query_!left_!up]/;      b a4q; }
+            /[.KFB]{2}4/         { s/$/[ai_4_cmd_query_!left_!left]/;          b a4q; }
+            /4[.KFB]{2}/         { s/$/[ai_4_cmd_query_!right_!right]/;         b a4q; }
+            /[.KFB]4/         { s/$/[ai_4_cmd_query_!left]/;          b a4q; }
+            /4[.KFB]/         { s/$/[ai_4_cmd_query_!right]/;         b a4q; }
         }
         /\[ai_4_goal_line_down\]/ {
-            /4.{79}\./    { s/$/[ai_4_cmd_query_!down]/;          b a4q; }
-            /4\..{78}#\./ { s/$/[ai_4_cmd_query_!right_!down]/;   b a4q; }
-            /\.4.{78}\.#/ { s/$/[ai_4_cmd_query_!left_!down]/;    b a4q; }
-            /\.4/         { s/$/[ai_4_cmd_query_!left]/;          b a4q; }
-            /4\./         { s/$/[ai_4_cmd_query_!right]/;         b a4q; }
+            /4.{79}[.KFB]/    { s/$/[ai_4_cmd_query_!down]/;          b a4q; }
+            /4[.KFB].{78}#[.KFB]/ { s/$/[ai_4_cmd_query_!right_!down]/;   b a4q; }
+            /[.KFB]4.{78}[.KFB]#/ { s/$/[ai_4_cmd_query_!left_!down]/;    b a4q; }
+            /[.KFB]{2}4/         { s/$/[ai_4_cmd_query_!left_!left]/;          b a4q; }
+            /4[.KFB]{2}/         { s/$/[ai_4_cmd_query_!right_!right]/;         b a4q; }
+            /[.KFB]4/         { s/$/[ai_4_cmd_query_!left]/;          b a4q; }
+            /4[.KFB]/         { s/$/[ai_4_cmd_query_!right]/;         b a4q; }
         }
         /\[ai_4_goal_shift_right\]/ {
-            /4\./         { s/$/[ai_4_cmd_query_!right]/;         b a4q; }
-            /\.\..{78}4#/ { s/$/[ai_4_cmd_query_!up_!right]/;     b a4q; }
-            /4#.{78}\.\./ { s/$/[ai_4_cmd_query_!down_!right]/;   b a4q; }
+            /4[.KFB]/         { s/$/[ai_4_cmd_query_!right]/;         b a4q; }
+            /[.KFB][.KFB].{78}4#/ { s/$/[ai_4_cmd_query_!up_!right]/;     b a4q; }
+            /4#.{78}[.KFB][.KFB]/ { s/$/[ai_4_cmd_query_!down_!right]/;   b a4q; }
         }
         /\[ai_4_goal_shift_left\]/ {
-            /\.4/         { s/$/[ai_4_cmd_query_!left]/;          b a4q; }
-            /\.\..{78}#4/ { s/$/[ai_4_cmd_query_!up_!left]/;      b a4q; }
-            /#4.{78}\.\./ { s/$/[ai_4_cmd_query_!down_!left]/;    b a4q; }
+            /[.KFB]4/         { s/$/[ai_4_cmd_query_!left]/;          b a4q; }
+            /[.KFB][.KFB].{78}#4/ { s/$/[ai_4_cmd_query_!up_!left]/;      b a4q; }
+            /#4.{78}[.KFB][.KFB]/ { s/$/[ai_4_cmd_query_!down_!left]/;    b a4q; }
         }
         s/(\[ai_4_goal_slide_(up|down)_(left|right)\].*)$/\1[ai_4_cmd_query_!\2_!\3]/
         s/(\[ai_4_goal_slide_(left|right)_(up|down)\].*)$/\1[ai_4_cmd_query_!\2_!\3]/
@@ -3181,9 +3337,9 @@ s/#{79}.*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\n(#[^\n]{,79}[41][^\n]{,79}#\n).*\[F
   s/\[BONUS:.*:SUNOB\]//
   s/\n\[RANDOM_NUMBER:.*:NR\]//g
   s/\[RANDOM_NUMBER:.*:NR\]//g
-  s/K(.*\[FIELD_END\])/k\1/g
-  s/F(.*\[FIELD_END\])/f\1/g
-  s/B(.*\[FIELD_END\])/b\1/g
+#  s/K(.*\[FIELD_END\])/k\1/g
+#  s/F(.*\[FIELD_END\])/f\1/g
+#  s/B(.*\[FIELD_END\])/b\1/g
   x;b end
 
 :end
