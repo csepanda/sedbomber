@@ -42,13 +42,13 @@ b end
 /\[ai_[2-4]_cmd_complete\]/b print_to_ai_handler
     b distance_check
 :print_to_ai_handler    
-/^.*2.*\[FIELD_END\]/ b second_terrorist_ai
+    /\[AI_ON_2\]/ { /^.*2.*\[FIELD_END\]/ b second_terrorist_ai; }
 :ai_2_finish
-/^.*3.*\[FIELD_END\]/ b third_terrorist_ai
+    /\[AI_ON_3\]/  { /^.*3.*\[FIELD_END\]/ b third_terrorist_ai;  }
 :ai_3_finish
-/^.*4.*\[FIELD_END\]/ b fourth_terrorist_ai
+    /\[AI_ON_4\]/ { /^.*4.*\[FIELD_END\]/ b fourth_terrorist_ai; }
 :ai_4_finish
-b  ai_cmds_completed
+    b  ai_cmds_completed
 :print_after_ai
     #remove last command and save current game state to hold buffer
     s/\n{2,}//
@@ -1893,6 +1893,8 @@ b  ai_cmds_completed
       /[.KFB][.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
       /2[.KFB][.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
       /2.{79}[.KFB]/   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
+      /[.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
+      /2[.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
       /\[ai_2_taking_cover/! {
         s/(([@a0oxAyO])(.{79}([.KFB].{79}([.KFB].{79})?)?)2.*)$/\1\[ai_2_taking_cover_\2\]/
       }
@@ -1915,6 +1917,8 @@ b  ai_cmds_completed
       /[.KFB][.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
       /2[.KFB][.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
       /[.KFB].{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
+      /[.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
+      /2[.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
       /\[ai_2_taking_cover/! {
         s/(2(.{79}([.KFB].{79}([.KFB].{79})?)?)([@a0oxAyO]).*)$/\1\[ai_2_taking_cover_\5\]/
       }
@@ -1937,6 +1941,8 @@ b  ai_cmds_completed
       /2[.KFB][.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
       /[.KFB].{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
       /2.{79}[.KFB]/   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
+      /[.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
+      /2[.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
       /\[ai_2_taking_cover/! { 
         s/(([@a0oxAyO])[.KFB]?[.KFB]?[.KFB]?2.*)$/\1\[ai_2_taking_cover_\2\]/
       }
@@ -1960,6 +1966,8 @@ b  ai_cmds_completed
       /[.KFB][.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
       /[.KFB].{79}2/   { s/(\[ai_2_goal)\]/\1_line_up\]/          }
       /2.{79}[.KFB]/   { s/(\[ai_2_goal)\]/\1_line_down\]/        }
+      /[.KFB]2/      { s/(\[ai_2_goal)\]/\1_shift_left\]/       }
+      /2[.KFB]/      { s/(\[ai_2_goal)\]/\1_shift_right\]/      }
       /\[ai_2_taking_cover/! {
         s/(2[.KFB]?[.KFB]?[.KFB]?([@a0oxAyO]).*)$/\1[ai_2_taking_cover_\2]/
       }
@@ -2482,6 +2490,8 @@ b ai_2_finish
       /3[.KFB][.KFB]/      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
       /[.KFB].{79}3/   { s/(\[ai_3_goal)\]/\1_line_up\]/          }
       /3.{79}[.KFB]/   { s/(\[ai_3_goal)\]/\1_line_down\]/        }
+      /[.KFB]3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
+      /3[.KFB]/      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
       /\[ai_3_taking_cover/! { 
         s/(([@a0oxAyO])[.KFB]?[.KFB]?[.KFB]?3.*)$/\1\[ai_3_taking_cover_\2\]/
       }
@@ -2505,6 +2515,8 @@ b ai_2_finish
       /[.KFB][.KFB]3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
       /[.KFB].{79}3/   { s/(\[ai_3_goal)\]/\1_line_up\]/          }
       /3.{79}[.KFB]/   { s/(\[ai_3_goal)\]/\1_line_down\]/        }
+      /[.KFB]3/      { s/(\[ai_3_goal)\]/\1_shift_left\]/       }
+      /3[.KFB]/      { s/(\[ai_3_goal)\]/\1_shift_right\]/      }
       /\[ai_3_taking_cover/! {
         s/(3[.KFB]?[.KFB]?[.KFB]?([@a0oxAyO]).*)$/\1[ai_3_taking_cover_\2]/
       }
@@ -3006,6 +3018,8 @@ b ai_3_finish
       /[.KFB][.KFB]4/      { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
       /4[.KFB][.KFB]/      { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
       /[.KFB].{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
+      /[.KFB]4/        { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
+      /4[.KFB]/        { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
       /\[ai_4_taking_cover/! {
         s/(4(.{79}([.KFB].{79}([.KFB].{79})?)?)([@a0oxAyO]).*)$/\1\[ai_4_taking_cover_\5\]/
       }
@@ -3028,6 +3042,8 @@ b ai_3_finish
       /4[.KFB][.KFB]/      { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
       /[.KFB].{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
       /4.{79}[.KFB]/   { s/(\[ai_4_goal)\]/\1_line_down\]/        }
+      /4[.KFB]/        { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
+      /[.KFB]4/        { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
       /\[ai_4_taking_cover/! { 
         s/(([@a0oxAyO])[.KFB]?[.KFB]?[.KFB]?4.*)$/\1\[ai_4_taking_cover_\2\]/
       }
@@ -3051,6 +3067,8 @@ b ai_3_finish
       /[.KFB][.KFB]4/      { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
       /[.KFB].{79}4/   { s/(\[ai_4_goal)\]/\1_line_up\]/          }
       /4.{79}[.KFB]/   { s/(\[ai_4_goal)\]/\1_line_down\]/        }
+      /[.KFB]4/        { s/(\[ai_4_goal)\]/\1_shift_left\]/       }
+      /4[.KFB]/        { s/(\[ai_4_goal)\]/\1_shift_right\]/      }
       /\[ai_4_taking_cover/! {
         s/(4[.KFB]?[.KFB]?[.KFB]?([@a0oxAyO]).*)$/\1[ai_4_taking_cover_\2]/
       }

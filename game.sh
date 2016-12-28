@@ -5,7 +5,7 @@
 tick=0.1
 index=1
 bonus_count=64
-clear
+
 trap 'kill -9 -$$' 2
 
 rm -f .game_tube
@@ -19,6 +19,21 @@ do
     echo [RANDOM_NUMBER:`expr $RANDOM \* 6661337`:NR]>&5    
     index=`expr $index + 1`
 done
+
+while $waiting; do
+    echo Write number of players:
+    read pcount
+    case $pcount in
+        '1') echo '[AI_ON_2][AI_ON_3][AI_ON_4]'>&5; waiting=false ;;
+        '2') echo '[AI_ON_3][AI_ON_4]'>&5;          waiting=false ;;
+        '3') echo '[AI_ON_4]'>&5;                   waiting=false ;;
+        '4')                                        waiting=false ;;
+        *)   echo Wrong count. Please try again. ;;
+    esac
+done
+
+clear
+
 while :; do    
     if 
         read -s -n 1 -t $tick key; then
